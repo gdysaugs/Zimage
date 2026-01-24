@@ -1,0 +1,86 @@
+import { createClient, type User } from '@supabase/supabase-js'
+
+type Env = {
+  SUPABASE_URL?: string
+  SUPABASE_SERVICE_ROLE_KEY?: string
+}
+
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+}
+
+const jsonResponse = (body: unknown, status = 200) =>
+  new Response(JSON.stringify(body), {
+    status,
+    headers: { ...corsHeaders, 'Content-Type': 'application/json', 'Cache-Control': 'no-store' },
+  })
+
+const extractBearerToken = (request: Request) => {
+  const header = request.headers.get('Authorization') || ''
+  const match = header.match(/Bearer\s+(.+)/i)
+  return match ? match[1] : ''
+}
+
+const getSupabaseAdmin = (env: Env) => {
+  const url = env.SUPABASE_URL
+  const serviceKey = env.SUPABASE_SERVICE_ROLE_KEY
+  if (!url || !serviceKey) return null
+  return createClient(url, serviceKey, {
+    auth: { persistSession: false, autoRefreshToken: false },
+  })
+}
+
+const isGoogleUser = (user: User) => {
+  if (user.app_metadata?.provider === 'google') return true
+  if (Array.isArray(user.identities)) {
+    return user.identities.some((identity) => identity.provider === 'google')
+  }
+  return false
+}
+
+const requireGoogleUser = async (request: Request, env: Env) => {
+  const token = extractBearerToken(request)
+  if (!token) {
+    return { response: jsonResponse({ error: 'ログインが必要です。' }, 401) }
+  }
+  const admin = getSupabaseAdmin(env)
+  if (!admin) {
+    return { response: jsonResponse({ error: 'SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY is not set.' }, 500) }
+  }
+  const { data, error } = await admin.auth.getUser(token)
+  if (error || !data?.user) {
+    return { response: jsonResponse({ error: '認証に失敗しました。' }, 401) }
+  }
+  if (!isGoogleUser(data.user)) {
+    return { response: jsonResponse({ error: 'Googleログインのみ利用できます。' }, 403) }
+  }
+  return { admin, user: data.user }
+}
+
+export const onRequestOptions: PagesFunction = async () => new Response(null, { headers: corsHeaders })
+
+export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
+  const auth = await requireGoogleUser(request, env)
+  if ('response' in auth) {
+    return auth.response
+  }
+
+  const email = auth.user.email
+  if (!email) {
+    return jsonResponse({ error: 'メールアドレスが取得できません。' }, 400)
+  }
+
+  const { data, error } = await auth.admin
+    .from('user_tickets')
+    .select('tickets')
+    .or(`user_id.eq.${auth.user.id},email.eq.${email}`)
+    .maybeSingle()
+
+  if (error) {
+    return jsonResponse({ error: error.message }, 500)
+  }
+
+  return jsonResponse({ tickets: data?.tickets ?? 0, hasRecord: Boolean(data) })
+}
