@@ -99,9 +99,9 @@
         0
       ],
       "seed": 0,
-      "steps": 35,
+      "steps": 45,
       "cfg": 4.5,
-      "sampler_name": "euler_ancestral",
+      "sampler_name": "er_sde",
       "scheduler": "simple",
       "denoise": 1
     },

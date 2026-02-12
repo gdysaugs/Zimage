@@ -19,7 +19,7 @@ const API_ENDPOINT = '/api/anima'
 const IMAGE_TICKET_COST = 1
 
 // Anima recommended defaults.
-const FIXED_STEPS = 35
+const FIXED_STEPS = 45
 const FIXED_CFG = 4.5
 const FIXED_WIDTH = 1024
 const FIXED_HEIGHT = 1024
