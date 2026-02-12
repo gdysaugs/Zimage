@@ -682,14 +682,10 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     return jsonResponse({ error: error instanceof Error ? error.message : 'Failed to read image.' }, 400, corsHeaders)
   }
 
-  if (!imageBase64) {
-    return jsonResponse({ error: 'Image is required.' }, 400, corsHeaders)
-  }
-
   const subImageBase64 = subImageBase64Raw || imageBase64
 
   try {
-    if (await isUnderageImage(imageBase64, env)) {
+    if (imageBase64 && (await isUnderageImage(imageBase64, env))) {
       return jsonResponse({ error: UNDERAGE_BLOCK_MESSAGE }, 400, corsHeaders)
     }
     if (
@@ -805,17 +801,25 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     const seed = input?.randomize_seed
       ? Math.floor(Math.random() * 2147483647)
       : Number(input?.seed ?? 0)
+    const hasPrimaryImageNode = Boolean((nodeMap as NodeMap)?.image)
+    const hasSecondaryImageNode = Boolean((nodeMap as NodeMap)?.image2)
+    if (hasPrimaryImageNode && !imageBase64) {
+      return jsonResponse({ error: 'Image is required for this workflow.' }, 400, corsHeaders)
+    }
+    const secondaryImageBase64 = subImageBase64Raw || imageBase64
+    if (hasSecondaryImageNode && !secondaryImageBase64) {
+      return jsonResponse({ error: 'Second image is required for this workflow.' }, 400, corsHeaders)
+    }
+
     const imageName = String(safeInput?.image_name ?? 'input.png')
     let subImageName = String(safeInput?.sub_image_name ?? safeInput?.image2_name ?? 'sub.png')
-    if (!subImageBase64Raw) {
+    if (!subImageBase64Raw && imageBase64) {
       subImageName = imageName
     } else if (subImageName === imageName) {
       subImageName = 'sub.png'
     }
 
     const nodeValues: Record<string, unknown> = {
-      image: imageName,
-      image2: subImageName,
       prompt,
       negative_prompt: negativePrompt,
       seed,
@@ -824,6 +828,12 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
       width,
       height,
       angle_strength: angleStrength,
+    }
+    if (hasPrimaryImageNode) {
+      nodeValues.image = imageName
+    }
+    if (hasSecondaryImageNode) {
+      nodeValues.image2 = subImageName
     }
     try {
       applyNodeMap(workflow as Record<string, any>, nodeMap as NodeMap, nodeValues)
@@ -852,13 +862,20 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     }
 
     const comfyKey = String(env.COMFY_ORG_API_KEY ?? '')
-    const images = [{ name: imageName, image: imageBase64 }]
-    if (subImageName !== imageName) {
-      images.push({ name: subImageName, image: subImageBase64 })
+    const images: Array<{ name: string; image: string }> = []
+    if (hasPrimaryImageNode && imageBase64) {
+      images.push({ name: imageName, image: imageBase64 })
     }
-    const runpodInput: Record<string, unknown> = {
-      workflow,
-      images,
+    if (hasSecondaryImageNode && secondaryImageBase64) {
+      const shouldUseSecondaryName = subImageName !== imageName || !hasPrimaryImageNode
+      images.push({
+        name: shouldUseSecondaryName ? subImageName : imageName,
+        image: secondaryImageBase64,
+      })
+    }
+    const runpodInput: Record<string, unknown> = { workflow }
+    if (images.length > 0) {
+      runpodInput.images = images
     }
     if (comfyKey) {
       runpodInput.comfy_org_api_key = comfyKey

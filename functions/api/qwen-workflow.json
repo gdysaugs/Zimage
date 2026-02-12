@@ -1,149 +1,139 @@
 {
-  "1": {
-    "class_type": "CheckpointLoaderSimple",
+  "16": {
+    "class_type": "UnetLoaderGGUF",
     "inputs": {
-      "ckpt_name": "Qwen/Qwen-Rapid-AIO-NSFW-v23.safetensors"
+      "unet_name": "z-image-turbo-Q4_K_M.gguf"
     },
     "_meta": {
-      "title": "Load Checkpoint"
+      "title": "Load UNet GGUF"
     }
   },
-  "2": {
+  "11": {
+    "class_type": "ModelSamplingAuraFlow",
+    "inputs": {
+      "model": [
+        "16",
+        0
+      ],
+      "shift": 3
+    },
+    "_meta": {
+      "title": "ModelSamplingAuraFlow"
+    }
+  },
+  "32": {
+    "class_type": "CLIPLoaderGGUF",
+    "inputs": {
+      "clip_name": "Qwen3-4B-UD-Q6_K_XL.gguf",
+      "type": "lumina2"
+    },
+    "_meta": {
+      "title": "Load CLIP GGUF"
+    }
+  },
+  "6": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "clip": [
+        "32",
+        0
+      ],
+      "text": ""
+    },
+    "_meta": {
+      "title": "Prompt"
+    }
+  },
+  "7": {
+    "class_type": "CLIPTextEncode",
+    "inputs": {
+      "clip": [
+        "32",
+        0
+      ],
+      "text": ""
+    },
+    "_meta": {
+      "title": "Negative Prompt"
+    }
+  },
+  "13": {
+    "class_type": "EmptySD3LatentImage",
+    "inputs": {
+      "width": 1024,
+      "height": 1024,
+      "batch_size": 1
+    },
+    "_meta": {
+      "title": "EmptySD3LatentImage"
+    }
+  },
+  "3": {
     "class_type": "KSampler",
     "inputs": {
       "model": [
-        "1",
+        "11",
         0
       ],
-      "seed": 0,
-      "steps": 4,
-      "cfg": 1,
-      "sampler_name": "sa_solver",
-      "scheduler": "beta",
       "positive": [
-        "3",
+        "6",
         0
       ],
       "negative": [
-        "4",
+        "7",
         0
       ],
       "latent_image": [
-        "9",
+        "13",
         0
       ],
+      "seed": 0,
+      "steps": 8,
+      "cfg": 1,
+      "sampler_name": "euler",
+      "scheduler": "simple",
       "denoise": 1
     },
     "_meta": {
       "title": "KSampler"
     }
   },
-  "3": {
-    "class_type": "TextEncodeQwenImageEditPlus",
+  "17": {
+    "class_type": "VAELoader",
     "inputs": {
-      "clip": [
-        "1",
-        1
-      ],
-      "prompt": "",
-      "vae": [
-        "1",
-        2
-      ],
-      "image1": [
-        "7",
-        0
-      ],
-      "image2": [
-        "8",
-        0
-      ]
+      "vae_name": "ae.safetensors"
     },
     "_meta": {
-      "title": "Prompt"
+      "title": "Load VAE"
     }
   },
-  "4": {
-    "class_type": "TextEncodeQwenImageEditPlus",
-    "inputs": {
-      "clip": [
-        "1",
-        1
-      ],
-      "prompt": "",
-      "vae": [
-        "1",
-        2
-      ],
-      "image1": [
-        "7",
-        0
-      ],
-      "image2": [
-        "8",
-        0
-      ]
-    },
-    "_meta": {
-      "title": "Negative Prompt"
-    }
-  },
-  "5": {
+  "8": {
     "class_type": "VAEDecode",
     "inputs": {
       "samples": [
-        "2",
+        "3",
         0
       ],
       "vae": [
-        "1",
-        2
+        "17",
+        0
       ]
     },
     "_meta": {
       "title": "VAE Decode"
     }
   },
-  "6": {
+  "9": {
     "class_type": "SaveImage",
     "inputs": {
       "images": [
-        "5",
+        "8",
         0
       ],
-      "filename_prefix": "Qwen_Rapid_AIO"
+      "filename_prefix": "zimage_t2i"
     },
     "_meta": {
       "title": "Save Image"
-    }
-  },
-  "7": {
-    "class_type": "LoadImage",
-    "inputs": {
-      "image": "input.png"
-    },
-    "_meta": {
-      "title": "Load Image 1"
-    }
-  },
-  "8": {
-    "class_type": "LoadImage",
-    "inputs": {
-      "image": "sub.png"
-    },
-    "_meta": {
-      "title": "Load Image 2"
-    }
-  },
-  "9": {
-    "class_type": "EmptyLatentImage",
-    "inputs": {
-      "width": 768,
-      "height": 768,
-      "batch_size": 1
-    },
-    "_meta": {
-      "title": "Final Image Size"
     }
   }
 }
