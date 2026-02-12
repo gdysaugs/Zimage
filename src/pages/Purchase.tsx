@@ -2,11 +2,11 @@ import { useCallback, useEffect, useState } from 'react'
 import type { Session } from '@supabase/supabase-js'
 import { isAuthConfigured, supabase } from '../lib/supabaseClient'
 import { PURCHASE_PLANS } from '../lib/purchasePlans'
+import { getOAuthRedirectUrl } from '../lib/oauthRedirect'
 import { TopNav } from '../components/TopNav'
 import './camera.css'
 
-const OAUTH_REDIRECT_URL =
-  import.meta.env.VITE_SUPABASE_REDIRECT_URL ?? (typeof window !== 'undefined' ? window.location.origin : undefined)
+const OAUTH_REDIRECT_URL = getOAuthRedirectUrl()
 
 const formatRemaining = (targetIso: string | null) => {
   if (!targetIso) return ''

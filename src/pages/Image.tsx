@@ -10,6 +10,7 @@ import {
 import { useNavigate } from 'react-router-dom'
 import type { Session } from '@supabase/supabase-js'
 import { isAuthConfigured, supabase } from '../lib/supabaseClient'
+import { getOAuthRedirectUrl } from '../lib/oauthRedirect'
 import { TopNav } from '../components/TopNav'
 import { GuestIntro } from '../components/GuestIntro'
 import './camera.css'
@@ -26,8 +27,7 @@ const IMAGE_TICKET_COST = 1
 const FIXED_STEPS = 4
 const FIXED_CFG = 1
 const FIXED_ANGLE_STRENGTH = 0
-const OAUTH_REDIRECT_URL =
-  import.meta.env.VITE_SUPABASE_REDIRECT_URL ?? (typeof window !== 'undefined' ? window.location.origin : undefined)
+const OAUTH_REDIRECT_URL = getOAuthRedirectUrl()
 
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
