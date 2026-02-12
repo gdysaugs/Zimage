@@ -6,6 +6,7 @@ import { isUnderageImage } from '../_shared/rekognition'
 
 type Env = {
   RUNPOD_API_KEY: string
+  RUNPOD_ZIMAGE_ENDPOINT_URL?: string
   RUNPOD_QWEN_ENDPOINT_URL?: string
   RUNPOD_ENDPOINT_URL?: string
   COMFY_ORG_API_KEY?: string
@@ -39,8 +40,10 @@ const normalizeEndpoint = (value?: string) => {
   }
 }
 
+const DEFAULT_ZIMAGE_ENDPOINT = 'https://api.runpod.ai/v2/nk5f686wu3645s'
+
 const resolveEndpoint = (env: Env) =>
-  normalizeEndpoint(env.RUNPOD_QWEN_ENDPOINT_URL) || normalizeEndpoint(env.RUNPOD_ENDPOINT_URL)
+  normalizeEndpoint(env.RUNPOD_ZIMAGE_ENDPOINT_URL) || DEFAULT_ZIMAGE_ENDPOINT
 
 type NodeMapEntry = {
   id: string
@@ -563,7 +566,7 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
   const endpoint = resolveEndpoint(env)
   if (!endpoint) {
     return jsonResponse(
-      { error: 'RUNPOD_QWEN_ENDPOINT_URL or RUNPOD_ENDPOINT_URL is invalid or missing.' },
+      { error: 'RUNPOD_ZIMAGE_ENDPOINT_URL is invalid or missing.' },
       500,
       corsHeaders,
     )
@@ -647,7 +650,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   const endpoint = resolveEndpoint(env)
   if (!endpoint) {
     return jsonResponse(
-      { error: 'RUNPOD_QWEN_ENDPOINT_URL or RUNPOD_ENDPOINT_URL is invalid or missing.' },
+      { error: 'RUNPOD_ZIMAGE_ENDPOINT_URL is invalid or missing.' },
       500,
       corsHeaders,
     )
