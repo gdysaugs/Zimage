@@ -99,9 +99,9 @@
         0
       ],
       "seed": 0,
-      "steps": 30,
-      "cfg": 4,
-      "sampler_name": "er_sde",
+      "steps": 40,
+      "cfg": 5.5,
+      "sampler_name": "euler_a",
       "scheduler": "simple",
       "denoise": 1
     },
@@ -139,4 +139,3 @@
     }
   }
 }
-
