@@ -74,7 +74,7 @@ const MAX_GUIDANCE = 10
 const MIN_ANGLE_STRENGTH = 0
 const MAX_ANGLE_STRENGTH = 1
 const UNDERAGE_BLOCK_MESSAGE =
-  '縺薙・逕ｻ蜒上↓縺ｯ證ｴ蜉帷噪縺ｪ陦ｨ迴ｾ縲∽ｽ主ｹｴ鮨｢縲√∪縺溘・隕冗ｴ・＆蜿阪・蜿ｯ閭ｽ諤ｧ縺後≠繧翫∪縺吶ょ挨縺ｮ逕ｻ蜒上〒縺願ｩｦ縺励￥縺縺輔＞縲・
+  'This image may contain violent, underage, or policy-violating content. Please try another image.'
 const getWorkflowTemplate = async () => workflowTemplate as Record<string, unknown>
 
 const getNodeMap = async () => nodeMapTemplate as NodeMap
