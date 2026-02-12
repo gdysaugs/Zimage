@@ -1,4 +1,4 @@
-import workflowTemplate from './qwen-workflow.json'
+﻿import workflowTemplate from './qwen-workflow.json'
 import nodeMapTemplate from './qwen-node-map.json'
 import { createClient, type User } from '@supabase/supabase-js'
 import { buildCorsHeaders, isCorsBlocked } from '../_shared/cors'
@@ -74,7 +74,7 @@ const MAX_GUIDANCE = 10
 const MIN_ANGLE_STRENGTH = 0
 const MAX_ANGLE_STRENGTH = 1
 const UNDERAGE_BLOCK_MESSAGE =
-  'この画像には暴力的な表現、低年齢、または規約違反の可能性があります。別の画像でお試しください。'
+  '縺薙・逕ｻ蜒上↓縺ｯ證ｴ蜉帷噪縺ｪ陦ｨ迴ｾ縲∽ｽ主ｹｴ鮨｢縲√∪縺溘・隕冗ｴ・＆蜿阪・蜿ｯ閭ｽ諤ｧ縺後≠繧翫∪縺吶ょ挨縺ｮ逕ｻ蜒上〒縺願ｩｦ縺励￥縺縺輔＞縲・
 const getWorkflowTemplate = async () => workflowTemplate as Record<string, unknown>
 
 const getNodeMap = async () => nodeMapTemplate as NodeMap
@@ -107,13 +107,13 @@ const isGoogleUser = (user: User) => {
 const requireGoogleUser = async (request: Request, env: Env, corsHeaders: HeadersInit) => {
   const token = extractBearerToken(request)
   if (!token) {
-    return { response: jsonResponse({ error: 'ログインが必要です。' }, 401, corsHeaders) }
+    return { response: jsonResponse({ error: '繝ｭ繧ｰ繧､繝ｳ縺悟ｿ・ｦ√〒縺吶・ }, 401, corsHeaders) }
   }
   const admin = getSupabaseAdmin(env)
   if (!admin) {
     return {
       response: jsonResponse(
-        { error: 'SUPABASE_URL または SUPABASE_SERVICE_ROLE_KEY が設定されていません。' },
+        { error: 'SUPABASE_URL 縺ｾ縺溘・ SUPABASE_SERVICE_ROLE_KEY 縺瑚ｨｭ螳壹＆繧後※縺・∪縺帙ｓ縲・ },
         500,
         corsHeaders,
       ),
@@ -121,10 +121,10 @@ const requireGoogleUser = async (request: Request, env: Env, corsHeaders: Header
   }
   const { data, error } = await admin.auth.getUser(token)
   if (error || !data?.user) {
-    return { response: jsonResponse({ error: '認証に失敗しました。' }, 401, corsHeaders) }
+    return { response: jsonResponse({ error: '隱崎ｨｼ縺ｫ螟ｱ謨励＠縺ｾ縺励◆縲・ }, 401, corsHeaders) }
   }
   if (!isGoogleUser(data.user)) {
-    return { response: jsonResponse({ error: 'Googleログインのみ対応しています。' }, 403, corsHeaders) }
+    return { response: jsonResponse({ error: 'Google繝ｭ繧ｰ繧､繝ｳ縺ｮ縺ｿ蟇ｾ蠢懊＠縺ｦ縺・∪縺吶・ }, 403, corsHeaders) }
   }
   return { admin, user: data.user }
 }
@@ -217,7 +217,7 @@ const ensureTicketAvailable = async (
 ) => {
   const email = user.email
   if (!email) {
-    return { response: jsonResponse({ error: 'メールアドレスが取得できません。' }, 400, corsHeaders) }
+    return { response: jsonResponse({ error: '繝｡繝ｼ繝ｫ繧｢繝峨Ξ繧ｹ縺悟叙蠕励〒縺阪∪縺帙ｓ縲・ }, 400, corsHeaders) }
   }
 
   const { data: existing, error } = await ensureTicketRow(admin, user)
@@ -227,7 +227,7 @@ const ensureTicketAvailable = async (
   }
 
   if (!existing) {
-    return { response: jsonResponse({ error: 'トークンが不足しています。' }, 402, corsHeaders) }
+    return { response: jsonResponse({ error: '繝医・繧ｯ繝ｳ縺御ｸ崎ｶｳ縺励※縺・∪縺吶・ }, 402, corsHeaders) }
   }
 
   if (!existing.user_id) {
@@ -235,7 +235,7 @@ const ensureTicketAvailable = async (
   }
 
   if (existing.tickets < 1) {
-    return { response: jsonResponse({ error: 'トークンが不足しています。' }, 402, corsHeaders) }
+    return { response: jsonResponse({ error: '繝医・繧ｯ繝ｳ縺御ｸ崎ｶｳ縺励※縺・∪縺吶・ }, 402, corsHeaders) }
   }
 
   return { existing }
@@ -250,7 +250,7 @@ const consumeTicket = async (
 ) => {
   const email = user.email
   if (!email) {
-    return { response: jsonResponse({ error: 'メールアドレスが取得できません。' }, 400, corsHeaders) }
+    return { response: jsonResponse({ error: '繝｡繝ｼ繝ｫ繧｢繝峨Ξ繧ｹ縺悟叙蠕励〒縺阪∪縺帙ｓ縲・ }, 400, corsHeaders) }
   }
 
   const { data: existing, error } = await ensureTicketRow(admin, user)
@@ -260,7 +260,7 @@ const consumeTicket = async (
   }
 
   if (!existing) {
-    return { response: jsonResponse({ error: 'トークンが不足しています。' }, 402, corsHeaders) }
+    return { response: jsonResponse({ error: '繝医・繧ｯ繝ｳ縺御ｸ崎ｶｳ縺励※縺・∪縺吶・ }, 402, corsHeaders) }
   }
 
   if (!existing.user_id) {
@@ -268,7 +268,7 @@ const consumeTicket = async (
   }
 
   if (existing.tickets < 1) {
-    return { response: jsonResponse({ error: 'トークンが不足しています。' }, 402, corsHeaders) }
+    return { response: jsonResponse({ error: '繝医・繧ｯ繝ｳ縺御ｸ崎ｶｳ縺励※縺・∪縺吶・ }, 402, corsHeaders) }
   }
 
   const resolvedUsageId = usageId ?? makeUsageId()
@@ -281,12 +281,12 @@ const consumeTicket = async (
   })
 
   if (rpcError) {
-    const message = rpcError.message ?? 'トークン消費に失敗しました。'
+    const message = rpcError.message ?? '繝医・繧ｯ繝ｳ豸郁ｲｻ縺ｫ螟ｱ謨励＠縺ｾ縺励◆縲・
     if (message.includes('INSUFFICIENT_TICKETS')) {
-      return { response: jsonResponse({ error: 'トークンが不足しています。' }, 402, corsHeaders) }
+      return { response: jsonResponse({ error: '繝医・繧ｯ繝ｳ縺御ｸ崎ｶｳ縺励※縺・∪縺吶・ }, 402, corsHeaders) }
     }
     if (message.includes('INVALID')) {
-      return { response: jsonResponse({ error: '不正なトークン操作です。' }, 400, corsHeaders) }
+      return { response: jsonResponse({ error: '荳肴ｭ｣縺ｪ繝医・繧ｯ繝ｳ謫堺ｽ懊〒縺吶・ }, 400, corsHeaders) }
     }
     return { response: jsonResponse({ error: message }, 500, corsHeaders) }
   }
@@ -348,7 +348,7 @@ const refundTicket = async (
   }
 
   if (!existing) {
-    return { response: jsonResponse({ error: 'トークンが不足しています。' }, 402, corsHeaders) }
+    return { response: jsonResponse({ error: '繝医・繧ｯ繝ｳ縺御ｸ崎ｶｳ縺励※縺・∪縺吶・ }, 402, corsHeaders) }
   }
 
   if (!existing.user_id) {
@@ -364,7 +364,7 @@ const refundTicket = async (
   })
 
   if (rpcError) {
-    const message = rpcError.message ?? 'トークン払い戻しに失敗しました。'
+    const message = rpcError.message ?? '繝医・繧ｯ繝ｳ謇輔＞謌ｻ縺励↓螟ｱ謨励＠縺ｾ縺励◆縲・
     if (message.includes('INVALID')) {
       return { response: jsonResponse({ error: message }, 400, corsHeaders) }
     }
@@ -551,10 +551,10 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
   const id = url.searchParams.get('id')
   const usageId = url.searchParams.get('usage_id') ?? url.searchParams.get('usageId') ?? ''
   if (!id) {
-    return jsonResponse({ error: 'idが必要です。' }, 400, corsHeaders)
+    return jsonResponse({ error: 'id縺悟ｿ・ｦ√〒縺吶・ }, 400, corsHeaders)
   }
   if (!usageId) {
-    return jsonResponse({ error: 'usage_idが必要です。' }, 400, corsHeaders)
+    return jsonResponse({ error: 'usage_id縺悟ｿ・ｦ√〒縺吶・ }, 400, corsHeaders)
   }
   if (!env.RUNPOD_API_KEY) {
     return jsonResponse({ error: 'RUNPOD_API_KEY is not set.' }, 500, corsHeaders)
@@ -676,11 +676,11 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
       'sub_image',
     )
   } catch (error) {
-    return jsonResponse({ error: error instanceof Error ? error.message : '画像の読み取りに失敗しました。' }, 400, corsHeaders)
+    return jsonResponse({ error: error instanceof Error ? error.message : '逕ｻ蜒上・隱ｭ縺ｿ蜿悶ｊ縺ｫ螟ｱ謨励＠縺ｾ縺励◆縲・ }, 400, corsHeaders)
   }
 
   if (!imageBase64) {
-    return jsonResponse({ error: '画像が必要です。' }, 400, corsHeaders)
+    return jsonResponse({ error: '逕ｻ蜒上′蠢・ｦ√〒縺吶・ }, 400, corsHeaders)
   }
 
   const subImageBase64 = subImageBase64Raw || imageBase64
@@ -1051,4 +1051,5 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     )
   }
 }
+
 
