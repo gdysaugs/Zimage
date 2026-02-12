@@ -51,7 +51,6 @@ const resolveEndpoint = (env: Env, variant: WorkflowVariant) => {
   if (variant === 'qwen_edit') {
     return (
       normalizeEndpoint(env.RUNPOD_QWEN_ENDPOINT_URL) ||
-      normalizeEndpoint(env.RUNPOD_ENDPOINT_URL) ||
       DEFAULT_QWEN_EDIT_ENDPOINT
     )
   }
