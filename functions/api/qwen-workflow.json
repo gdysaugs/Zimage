@@ -12,7 +12,7 @@
     "class_type": "ModelSamplingAuraFlow",
     "inputs": {
       "model": [
-        "16",
+        "18",
         0
       ],
       "shift": 3
@@ -29,6 +29,20 @@
     },
     "_meta": {
       "title": "Load CLIP GGUF"
+    }
+  },
+  "18": {
+    "class_type": "LoraLoaderModelOnly",
+    "inputs": {
+      "model": [
+        "16",
+        0
+      ],
+      "lora_name": "gp-zimage_000008000.safetensors",
+      "strength_model": 0.8
+    },
+    "_meta": {
+      "title": "ZImage LoRA (0.8)"
     }
   },
   "6": {
