@@ -8,3 +8,5 @@ runpod-worker-wan/models/
 runpod-worker-qwen/models/
 *.gguf
 *.safetensors
+
+runpod-worker-anima/models/
