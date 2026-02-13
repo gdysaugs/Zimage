@@ -8,10 +8,8 @@ const ASSETS = {
   modeReal: '/media/mode-real-v2.jpg',
   modeAnime: '/media/mode-anime-v2.png',
   modeEdit: '/media/mode-edit-v2.png',
-  howToSource1: '/media/howto-source-1.jpg',
-  howToResult1: '/media/howto-result-1.mp4',
-  howToSource2: '/media/howto-source-2.jpg',
-  howToResult2: '/media/howto-result-2.png',
+  promptTipReal: '/media/prompt-tip-real.jpg',
+  promptTipAnime: '/media/prompt-tip-anime.png',
 }
 
 export function GuestIntro({ mode: _mode, onSignIn }: GuestIntroProps) {
@@ -65,44 +63,21 @@ export function GuestIntro({ mode: _mode, onSignIn }: GuestIntroProps) {
 
       <section className="melt-howto">
         <div className="melt-howto__header">
-          <h2>使い方（例）</h2>
-          <p>画像とプロンプトだけで、編集結果をすぐプレビュー。</p>
+          <h2>プロンプトのコツ</h2>
+          <p>リアルとアニメで書き方を切り替えると、狙った画に近づきます。</p>
         </div>
         <div className="melt-howto__flow">
           <div className="melt-howto__card">
-            <p>元画像</p>
-            <img src={ASSETS.howToSource2} alt="元画像サンプル" loading="lazy" />
-          </div>
-          <div className="melt-howto__card melt-howto__card--prompt">
-            <p>プロンプト</p>
-            <strong>帽子をかぶって金髪にして</strong>
-            <small>ネガティブも同画面で入力</small>
+            <p>リアル画像（自然言語）</p>
+            <img src={ASSETS.promptTipReal} alt="リアル生成のプロンプト例" loading="lazy" />
+            <strong>日本人の女性がカフェでアイスを笑顔で食べる</strong>
+            <small>リアル画像は自然言語で記述可能</small>
           </div>
           <div className="melt-howto__card">
-            <p>生成結果</p>
-            <img src={ASSETS.howToResult2} alt="生成結果サンプル" loading="lazy" />
-          </div>
-        </div>
-      </section>
-
-      <section className="melt-howto">
-        <div className="melt-howto__header">
-          <h2>動画生成（例）</h2>
-          <p>静止画をアップロードして短尺動画へ。</p>
-        </div>
-        <div className="melt-howto__flow">
-          <div className="melt-howto__card">
-            <p>元画像</p>
-            <img src={ASSETS.howToSource1} alt="動画元画像サンプル" loading="lazy" />
-          </div>
-          <div className="melt-howto__card melt-howto__card--prompt">
-            <p>プロンプト</p>
-            <strong>女性が笑顔で手を振る</strong>
-            <small>アニメタブ / 動画モードで生成</small>
-          </div>
-          <div className="melt-howto__card">
-            <p>生成結果</p>
-            <video src={ASSETS.howToResult1} autoPlay loop muted playsInline preload="metadata" />
+            <p>アニメ画像（タグ形式）</p>
+            <img src={ASSETS.promptTipAnime} alt="アニメ生成のプロンプト例" loading="lazy" />
+            <strong>1girl, masterpiece, best quality, coat, long skirt, @anime</strong>
+            <small>アニメ画像はタグ形式がおすすめ（@で絵師スタイル指定可能）</small>
           </div>
         </div>
       </section>
