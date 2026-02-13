@@ -5,6 +5,9 @@ type GuestIntroProps = {
 
 const ASSETS = {
   hero: '/media/melt-banner.png',
+  modeReal: '/media/mode-real.png',
+  modeAnime: '/media/mode-anime.jpg',
+  modeEdit: '/media/mode-edit.png',
   howToSource1: '/media/howto-source-1.jpg',
   howToResult1: '/media/howto-result-1.mp4',
   howToSource2: '/media/howto-source-2.jpg',
@@ -45,15 +48,18 @@ export function GuestIntro({ mode: _mode, onSignIn }: GuestIntroProps) {
       <section className="melt-modes">
         <article className="melt-mode-card">
           <h3>リアル</h3>
-          <p>zimage で高密度なリアル画像を生成。</p>
+          <p>実写AIエンジンで高密度なリアル画像を生成。</p>
+          <img className="melt-mode-card__image" src={ASSETS.modeReal} alt="リアル生成の説明画像" loading="lazy" />
         </article>
         <article className="melt-mode-card">
           <h3>アニメ</h3>
-          <p>anima でスタイル重視のアニメイラストを生成。</p>
+          <p>神絵師超えのアニメイラストを瞬時に生成。</p>
+          <img className="melt-mode-card__image" src={ASSETS.modeAnime} alt="アニメ生成の説明画像" loading="lazy" />
         </article>
         <article className="melt-mode-card">
           <h3>編集</h3>
-          <p>Qwen Image Edit で元画像を意図通りに変換。</p>
+          <p>高機能編集で元画像を意図通りに変換。</p>
+          <img className="melt-mode-card__image" src={ASSETS.modeEdit} alt="編集機能の説明画像" loading="lazy" />
         </article>
       </section>
 
