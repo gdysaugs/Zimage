@@ -17,7 +17,7 @@ export function GuestIntro({ mode: _mode, onSignIn }: GuestIntroProps) {
     <div className="guest-shell guest-shell--media">
       <section className="guest-headline">
         <p className="guest-headline__overlay">AIですべての画像を動画に</p>
-        <img className="guest-headline__art" src={ASSETS.headlineArt} alt="FOX AI" />
+        <img className="guest-headline__art" src={ASSETS.headlineArt} alt="Melt AI" />
         <div className="guest-headline__quick">
           <span>画像から画像</span>
           <span>画像から動画</span>
@@ -122,11 +122,11 @@ export function GuestIntro({ mode: _mode, onSignIn }: GuestIntroProps) {
 
       <section className="guest-section guest-faq">
         <div className="guest-section__header">
-          <h2>FOX AIについて</h2>
+          <h2>Melt AIについて</h2>
         </div>
         <div className="guest-faq__list">
           <div className="guest-faq__item">
-            <p className="guest-faq__q">Q. FOX AIとは？</p>
+            <p className="guest-faq__q">Q. Melt AIとは？</p>
             <p className="guest-faq__a">A. テキストや画像から短い動画を生成できるプラットフォームです。</p>
           </div>
           <div className="guest-faq__item">
@@ -185,8 +185,8 @@ export function GuestIntro({ mode: _mode, onSignIn }: GuestIntroProps) {
           <p>サービス提供に関する重要事項を記載しています。</p>
         </div>
         <ul>
-          <li>販売事業者名：FOX AI</li>
-          <li>運営責任者：FOX AI運営責任者</li>
+          <li>販売事業者名：Melt AI</li>
+          <li>運営責任者：Melt AI運営責任者</li>
           <li>販売価格：各プランページに表示</li>
           <li>商品代金以外の必要料金：通信料等はお客様の負担となります</li>
           <li>支払方法：クレジットカード（Linkを含む）</li>
