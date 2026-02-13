@@ -1737,9 +1737,10 @@ body {
   padding: 7px 11px;
   border-radius: 999px;
   font-size: 0.82rem;
-  color: #bae6fd;
-  border: 1px solid rgba(14, 165, 233, 0.35);
-  background: rgba(2, 132, 199, 0.16);
+  color: #0f172a;
+  border: 1px solid rgba(14, 165, 233, 0.45);
+  background: rgba(125, 211, 252, 0.32);
+  font-weight: 700;
 }
 
 .melt-hero__actions {
