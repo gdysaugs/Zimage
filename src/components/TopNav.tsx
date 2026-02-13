@@ -10,7 +10,7 @@ export function TopNav() {
         <NavLink to='/' className={({ isActive }) => `top-nav__link${isActive ? ' is-active' : ''}`}>
           リアル
         </NavLink>
-        <NavLink to='/video' className={({ isActive }) => `top-nav__link${isActive ? ' is-active' : ''}`}>
+        <NavLink to='/anime' className={({ isActive }) => `top-nav__link${isActive ? ' is-active' : ''}`}>
           アニメ
         </NavLink>
         <NavLink to='/image' className={({ isActive }) => `top-nav__link${isActive ? ' is-active' : ''}`}>

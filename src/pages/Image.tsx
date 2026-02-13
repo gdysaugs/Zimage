@@ -228,7 +228,6 @@ export function Image() {
   const [result, setResult] = useState<RenderResult | null>(null)
   const [statusMessage, setStatusMessage] = useState('')
   const [isRunning, setIsRunning] = useState(false)
-  const [step, setStep] = useState(0)
   const [session, setSession] = useState<Session | null>(null)
   const [authReady, setAuthReady] = useState(!supabase)
   const [ticketCount, setTicketCount] = useState<number | null>(null)
@@ -240,10 +239,7 @@ export function Image() {
   const navigate = useNavigate()
 
   const accessToken = session?.access_token ?? ''
-  const totalSteps = 4
-  const stepTitles = ['画像アップロード', 'プロンプト', 'ネガティブプロンプト', '生成'] as const
-  const canAdvanceImage = Boolean(sourcePayload)
-  const canAdvancePrompt = prompt.trim().length > 0
+  const canGenerate = Boolean(sourcePayload) && prompt.trim().length > 0 && !isRunning
   const displayImage = result?.image ?? null
 
   const viewerStyle = useMemo(
@@ -513,7 +509,6 @@ export function Image() {
     setSourcePayload(null)
     setSourceName('')
     setStatusMessage('')
-    setStep(0)
   }
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -589,114 +584,56 @@ export function Image() {
         <section className="wizard-panel wizard-panel--inputs">
           <div className="wizard-card wizard-card--step">
             <div className="wizard-stepper">
-              <div className="wizard-stepper__meta">
-                <span>{`ステップ ${step + 1} / ${totalSteps}`}</span>
-                <div className="wizard-dots">
-                  {Array.from({ length: totalSteps }).map((_, index) => (
-                    <span key={`i2i-step-${index}`} className={`wizard-dot${index <= step ? ' is-active' : ''}`} />
-                  ))}
-                </div>
-              </div>
               <div className="wizard-status">
                 {ticketStatus === 'loading' && 'トークンを確認中...'}
                 {ticketStatus !== 'loading' && `トークン: ${ticketCount ?? 0}`}
                 {ticketStatus === 'error' && ticketMessage ? ` / ${ticketMessage}` : ''}
               </div>
-              <h2>{stepTitles[step]}</h2>
+              <h2>画像編集</h2>
             </div>
 
-            {step === 0 && (
-              <div className="wizard-section">
-                <label className="upload-box">
-                  <input type="file" accept="image/*" onChange={handleFileChange} />
-                  <div>
-                    <strong>{sourceName || '画像をアップロード'}</strong>
-                    <span>画像から画像を生成する元画像を選択してください。</span>
-                  </div>
-                </label>
-                {sourcePreview && (
-                  <div className="preview-card">
-                    <button
-                      type="button"
-                      className="preview-card__remove"
-                      onClick={clearImage}
-                      aria-label="画像を削除"
-                    >
-                      x
-                    </button>
-                    <img src={sourcePreview} alt="元画像プレビュー" />
-                  </div>
-                )}
-              </div>
-            )}
-
-            {step === 1 && (
-              <label className="wizard-field">
-                <span>プロンプト</span>
-                <textarea
-                  rows={4}
-                  value={prompt}
-                  onChange={(e) => setPrompt(e.target.value)}
-                  placeholder="例: 女性が笑顔で手を振る"
-                />
+            <div className="wizard-section">
+              <label className="upload-box">
+                <input type="file" accept="image/*" onChange={handleFileChange} />
+                <div>
+                  <strong>{sourceName || '画像をアップロード'}</strong>
+                  <span>元画像を選択してください。</span>
+                </div>
               </label>
-            )}
+              {sourcePreview && (
+                <div className="preview-card">
+                  <button type="button" className="preview-card__remove" onClick={clearImage} aria-label="画像を削除">
+                    x
+                  </button>
+                  <img src={sourcePreview} alt="元画像プレビュー" />
+                </div>
+              )}
+            </div>
 
-            {step === 2 && (
-              <label className="wizard-field">
-                <span>ネガティブプロンプト</span>
-                <textarea
-                  rows={3}
-                  value={negativePrompt}
-                  onChange={(e) => setNegativePrompt(e.target.value)}
-                  placeholder="任意: 避けたい内容を入力。"
-                />
-              </label>
-            )}
+            <label className="wizard-field">
+              <span>プロンプト</span>
+              <textarea
+                rows={4}
+                value={prompt}
+                onChange={(e) => setPrompt(e.target.value)}
+                placeholder="例: 帽子をかぶって金髪にして"
+              />
+            </label>
 
-            {step === 3 && (
-              <div className="wizard-summary">
-                <div>
-                  <p>プロンプト</p>
-                  <strong>{prompt || '-'}</strong>
-                </div>
-                <div>
-                  <p>ネガティブプロンプト</p>
-                  <strong>{negativePrompt || '-'}</strong>
-                </div>
-                <div>
-                  <p>出力サイズ</p>
-                  <strong>{`${width} x ${height}`}</strong>
-                </div>
-              </div>
-            )}
+            <label className="wizard-field">
+              <span>ネガティブプロンプト</span>
+              <textarea
+                rows={3}
+                value={negativePrompt}
+                onChange={(e) => setNegativePrompt(e.target.value)}
+                placeholder="任意: 避けたい内容を入力。"
+              />
+            </label>
 
             <div className="wizard-actions">
-              {step > 0 && (
-                <button type="button" className="ghost-button" onClick={() => setStep((prev) => Math.max(prev - 1, 0))}>
-                  戻る
-                </button>
-              )}
-              {step === 0 && (
-                <button type="button" className="primary-button" onClick={() => setStep(1)} disabled={!canAdvanceImage}>
-                  次へ
-                </button>
-              )}
-              {step === 1 && (
-                <button type="button" className="primary-button" onClick={() => setStep(2)} disabled={!canAdvancePrompt}>
-                  次へ
-                </button>
-              )}
-              {step === 2 && (
-                <button type="button" className="primary-button" onClick={() => setStep(3)}>
-                  次へ
-                </button>
-              )}
-              {step === 3 && (
-                <button type="button" className="primary-button" onClick={handleGenerate} disabled={!sourcePayload || isRunning}>
-                  {isRunning ? '生成中...' : '生成'}
-                </button>
-              )}
+              <button type="button" className="primary-button" onClick={handleGenerate} disabled={!canGenerate}>
+                {isRunning ? '生成中...' : '生成'}
+              </button>
             </div>
           </div>
         </section>

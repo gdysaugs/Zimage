@@ -11,7 +11,8 @@ export function App() {
       <Route path='/' element={<TextImage />} />
       <Route path='/image' element={<Image />} />
       <Route path='/purchase' element={<Purchase />} />
-      <Route path='/video' element={<Video />} />
+      <Route path='/anime' element={<Video />} />
+      <Route path='/video' element={<Navigate to='/anime' replace />} />
       <Route path='/account' element={<Account />} />
       <Route path='*' element={<Navigate to='/' replace />} />
     </Routes>
