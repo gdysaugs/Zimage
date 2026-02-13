@@ -451,7 +451,7 @@ export function TextImage() {
 
   const handleDownload = useCallback(async () => {
     if (!displayImage) return
-    const filename = 't2i-result.png'
+    const filename = 'image-result.png'
     try {
       let blob: Blob
       if (displayImage.startsWith('data:')) {
@@ -500,9 +500,6 @@ export function TextImage() {
         <section className='wizard-panel wizard-panel--inputs'>
           <div className='wizard-card wizard-card--step'>
             <div className='wizard-stepper'>
-              <div className='wizard-stepper__meta'>
-                <span>T2I</span>
-              </div>
               <div className='wizard-status'>
                 {ticketStatus === 'loading' && 'トークンを確認中...'}
                 {ticketStatus !== 'loading' && `トークン: ${ticketCount ?? 0}`}

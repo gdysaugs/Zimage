@@ -14,11 +14,11 @@ type RenderResult = {
   error?: string
 }
 
-// I2V tab is repurposed to Anima (anime T2I) image generation.
+// Anime image generation tab.
 const API_ENDPOINT = '/api/anima'
 const IMAGE_TICKET_COST = 1
 
-// Anima recommended defaults.
+// Recommended defaults.
 const FIXED_STEPS = 45
 const FIXED_CFG = 4.5
 const FIXED_WIDTH = 1024
@@ -460,7 +460,7 @@ export function Video() {
 
   const handleDownload = useCallback(async () => {
     if (!displayImage) return
-    const filename = 'anima-result.png'
+    const filename = 'anime-result.png'
     try {
       let blob: Blob
       if (displayImage.startsWith('data:')) {
@@ -509,15 +509,12 @@ export function Video() {
         <section className='wizard-panel wizard-panel--inputs'>
           <div className='wizard-card wizard-card--step'>
             <div className='wizard-stepper'>
-              <div className='wizard-stepper__meta'>
-                <span>I2V</span>
-              </div>
               <div className='wizard-status'>
                 {ticketStatus === 'loading' && 'トークンを確認中...'}
                 {ticketStatus !== 'loading' && 'トークン: ' + String(ticketCount ?? 0)}
                 {ticketStatus === 'error' && ticketMessage ? ' / ' + ticketMessage : ''}
               </div>
-              <h2>Animaでアニメ画像を生成</h2>
+              <h2>アニメ画像を生成</h2>
             </div>
 
             <label className='wizard-field'>
