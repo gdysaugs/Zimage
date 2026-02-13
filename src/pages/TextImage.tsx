@@ -533,7 +533,7 @@ export function TextImage() {
 
             <div className='wizard-actions'>
               <button type='button' className='primary-button' onClick={handleGenerate} disabled={isRunning || !canGenerate}>
-                {isRunning ? '生成中...' : '生成'}
+                {isRunning ? 'Generating...' : '生成'}
               </button>
             </div>
           </div>
@@ -543,7 +543,7 @@ export function TextImage() {
           <div className='wizard-card wizard-card--preview'>
             <div className='wizard-card__header'>
               <div>
-                <p className='wizard-eyebrow'>プレビュー</p>
+                <p className='wizard-eyebrow'>生成結果</p>
                 {statusMessage && !isRunning && <span>{statusMessage}</span>}
               </div>
               {displayImage && (
@@ -557,8 +557,13 @@ export function TextImage() {
               <div className='viewer-progress' aria-hidden='true' />
               {isRunning ? (
                 <div className='loading-display' role='status' aria-live='polite'>
-                  <div className='loading-orb' aria-hidden='true' />
-                  <span className='loading-blink'>生成中...</span>
+                  <div className='loading-rings' aria-hidden='true'>
+                    <span />
+                    <span />
+                    <span />
+                  </div>
+                  <span className='loading-blink'>Generating...</span>
+                  <p>処理を実行しています</p>
                 </div>
               ) : displayImage ? (
                 <img src={displayImage} alt='生成結果' />
