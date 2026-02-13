@@ -5,9 +5,9 @@ type GuestIntroProps = {
 
 const ASSETS = {
   hero: '/media/melt-banner.png',
-  modeReal: '/media/mode-real.png',
-  modeAnime: '/media/mode-anime.jpg',
-  modeEdit: '/media/mode-edit.png',
+  modeReal: '/media/mode-real-v2.jpg',
+  modeAnime: '/media/mode-anime-v2.png',
+  modeEdit: '/media/mode-edit-v2.png',
   howToSource1: '/media/howto-source-1.jpg',
   howToResult1: '/media/howto-result-1.mp4',
   howToSource2: '/media/howto-source-2.jpg',
