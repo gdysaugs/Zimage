@@ -35,6 +35,8 @@ const jsonResponse = (body: unknown, status = 200) =>
     headers: { ...corsHeaders, 'Content-Type': 'application/json' },
   })
 
+const received = (extra: Record<string, unknown> = {}) => jsonResponse({ received: true, ...extra })
+
 const getSupabaseAdmin = (env: Env) => {
   const url = env.SUPABASE_URL
   const serviceKey = env.SUPABASE_SERVICE_ROLE_KEY
@@ -87,7 +89,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     return jsonResponse({ error: 'STRIPE_WEBHOOK_SECRET is not set.' }, 500)
   }
 
-  const signature = request.headers.get('stripe-signature') || ''
+  const signature = request.headers.get('Stripe-Signature') || request.headers.get('stripe-signature') || ''
   const body = await request.text()
   const isValid = await verifyStripeSignature(body, signature, secret)
   if (!isValid) {
@@ -100,22 +102,22 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   }
 
   if (event.type !== 'checkout.session.completed') {
-    return jsonResponse({ received: true })
+    return received({ ignored: true, reason: 'unsupported_event_type', event_type: event.type })
   }
 
   const session = event.data?.object ?? {}
   if (session.payment_status && session.payment_status !== 'paid') {
-    return jsonResponse({ received: true })
+    return received({ ignored: true, reason: 'not_paid', payment_status: session.payment_status })
   }
 
   const appTag = String(session.metadata?.app ?? '')
   if (!ACCEPTED_APP_TAGS.has(appTag)) {
-    return jsonResponse({ received: true })
+    return received({ ignored: true, reason: 'app_mismatch', app: appTag })
   }
 
   const priceId = String(session.metadata?.price_id ?? '')
   if (!priceId || !ACCEPTED_PRICE_IDS.has(priceId)) {
-    return jsonResponse({ received: true })
+    return received({ ignored: true, reason: 'price_id_mismatch', price_id: priceId })
   }
 
   const tickets = Number(session.metadata?.tickets ?? 0)
@@ -135,7 +137,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
 
   const { data: userCheck, error: userCheckError } = await admin.auth.admin.getUserById(userId)
   if (userCheckError || !userCheck?.user) {
-    return jsonResponse({ received: true })
+    return received({ ignored: true, reason: 'user_not_found', user_id: userId })
   }
 
   const { data: rpcData, error: rpcError } = await admin.rpc('grant_tickets', {
@@ -162,8 +164,8 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
 
   const result = Array.isArray(rpcData) ? rpcData[0] : rpcData
   if (result?.already_processed) {
-    return jsonResponse({ received: true, duplicate: true })
+    return received({ duplicate: true })
   }
 
-  return jsonResponse({ received: true })
+  return received()
 }
