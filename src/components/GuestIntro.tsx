@@ -4,7 +4,7 @@ type GuestIntroProps = {
 }
 
 const ASSETS = {
-  hero: '/media/IMG_4300.PNG',
+  hero: '/media/melt-banner.png',
   howToSource1: '/media/howto-source-1.jpg',
   howToResult1: '/media/howto-result-1.mp4',
   howToSource2: '/media/howto-source-2.jpg',
@@ -100,4 +100,3 @@ export function GuestIntro({ mode: _mode, onSignIn }: GuestIntroProps) {
     </div>
   )
 }
-
