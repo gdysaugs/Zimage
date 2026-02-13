@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
+﻿import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from 'react'
 import { useNavigate } from 'react-router-dom'
 import type { Session } from '@supabase/supabase-js'
 import { GuestIntro } from '../components/GuestIntro'
@@ -269,7 +269,7 @@ export function Video() {
     const data = await res.json().catch(() => ({}))
     if (!res.ok) {
       setTicketStatus('error')
-      setTicketMessage(data?.error || 'トークンの取得に失敗しました。')
+      setTicketMessage(data?.error || 'クレジットの取得に失敗しました。')
       setTicketCount(null)
       return null
     }
@@ -315,7 +315,7 @@ export function Video() {
         const message = normalizeErrorMessage(rawMessage)
         if (isTicketShortage(res.status, message)) {
           setShowTicketModal(true)
-          setStatusMessage('トークン不足')
+          setStatusMessage('クレジット不足')
           throw new Error('TICKET_SHORTAGE')
         }
         setErrorModalMessage(message)
@@ -347,7 +347,7 @@ export function Video() {
         const message = normalizeErrorMessage(rawMessage)
         if (isTicketShortage(res.status, message)) {
           setShowTicketModal(true)
-          setStatusMessage('トークン不足')
+          setStatusMessage('クレジット不足')
           throw new Error('TICKET_SHORTAGE')
         }
         setErrorModalMessage(message)
@@ -394,8 +394,8 @@ export function Video() {
       } catch (error) {
         const message = normalizeErrorMessage(error instanceof Error ? error.message : error)
         if (message === 'TICKET_SHORTAGE') {
-          setResult({ id: makeId(), status: 'error', error: 'トークン不足' })
-          setStatusMessage('トークン不足')
+          setResult({ id: makeId(), status: 'error', error: 'クレジット不足' })
+          setStatusMessage('クレジット不足')
         } else {
           setResult({ id: makeId(), status: 'error', error: message })
           setStatusMessage(message)
@@ -415,18 +415,18 @@ export function Video() {
       return
     }
     if (ticketStatus === 'loading') {
-      setStatusMessage('トークンを確認中...')
+      setStatusMessage('クレジットを確認中...')
       return
     }
     if (accessToken) {
-      setStatusMessage('トークンを確認中...')
+      setStatusMessage('クレジットを確認中...')
       const latestCount = await fetchTickets(accessToken)
       if (latestCount !== null && latestCount < IMAGE_TICKET_COST) {
         setShowTicketModal(true)
         return
       }
     } else if (ticketCount === null) {
-      setStatusMessage('トークンを確認中...')
+      setStatusMessage('クレジットを確認中...')
       return
     } else if (ticketCount < IMAGE_TICKET_COST) {
       setShowTicketModal(true)
@@ -510,8 +510,8 @@ export function Video() {
           <div className='wizard-card wizard-card--step'>
             <div className='wizard-stepper'>
               <div className='wizard-status'>
-                {ticketStatus === 'loading' && 'トークンを確認中...'}
-                {ticketStatus !== 'loading' && 'トークン: ' + String(ticketCount ?? 0)}
+                {ticketStatus === 'loading' && 'クレジットを確認中...'}
+                {ticketStatus !== 'loading' && 'クレジット: ' + String(ticketCount ?? 0)}
                 {ticketStatus === 'error' && ticketMessage ? ' / ' + ticketMessage : ''}
               </div>
               <h2>アニメ画像を生成</h2>
@@ -584,8 +584,8 @@ export function Video() {
       {showTicketModal && (
         <div className='modal-overlay' role='dialog' aria-modal='true'>
           <div className='modal-card'>
-            <h3>トークン不足</h3>
-            <p>画像生成は1トークン必要です。購入ページへ移動しますか？</p>
+            <h3>クレジット不足</h3>
+            <p>画像生成は1クレジット必要です。購入ページへ移動しますか？</p>
             <div className='modal-actions'>
               <button type='button' className='ghost-button' onClick={() => setShowTicketModal(false)}>
                 閉じる
@@ -614,3 +614,4 @@ export function Video() {
     </div>
   )
 }
+

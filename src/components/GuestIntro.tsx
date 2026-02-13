@@ -81,6 +81,54 @@ export function GuestIntro({ mode: _mode, onSignIn }: GuestIntroProps) {
           </div>
         </div>
       </section>
+
+      <section className="melt-voices">
+        <div className="melt-howto__header">
+          <h2>採用実績 / ユーザーの声</h2>
+          <p>実制作・創作活動での活用例</p>
+        </div>
+        <div className="melt-voices__grid">
+          <article className="melt-voice-card">
+            <p>
+              イラストの資料作成が早くなり、構図検討に使える素材を短時間で作れるようになりました。
+            </p>
+            <small>28歳 / 女性 / M.K</small>
+          </article>
+          <article className="melt-voice-card">
+            <p>
+              二次創作のラフ出しで活用しています。複数案をすぐ比較できるので、制作効率が上がりました。
+            </p>
+            <small>22歳 / 男性 / R.S</small>
+          </article>
+          <article className="melt-voice-card">
+            <p>
+              SNSアイコン作成で使っています。テイスト違いを大量に試せて、イメージに合う案を選びやすいです。
+            </p>
+            <small>31歳 / 女性 / A.T</small>
+          </article>
+        </div>
+      </section>
+
+      <section className="melt-legal">
+        <h2>利用規約</h2>
+        <p>
+          本サービスの利用者は、法令および公序良俗に反する目的で本サービスを利用してはなりません。
+          生成コンテンツの利用に関する責任は利用者に帰属します。
+        </p>
+        <p>
+          サービス品質の維持・改善のため、予告なく機能・仕様を変更する場合があります。重大な変更は本サイト上で告知します。
+        </p>
+      </section>
+
+      <section className="melt-legal">
+        <h2>特定商取引法に基づく表記</h2>
+        <p>販売事業者: Melt AI 運営事務局</p>
+        <p>連絡先: お問い合わせフォームよりご連絡ください</p>
+        <p>販売価格: 各購入ページに記載</p>
+        <p>支払方法: クレジットカード決済</p>
+        <p>提供時期: 決済完了後、直ちに利用可能</p>
+        <p>返品・キャンセル: デジタルサービスの性質上、原則として返金不可</p>
+      </section>
     </div>
   )
 }

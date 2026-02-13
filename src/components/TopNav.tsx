@@ -17,9 +17,10 @@ export function TopNav() {
           編集
         </NavLink>
         <NavLink to='/purchase' className={({ isActive }) => `top-nav__link${isActive ? ' is-active' : ''}`}>
-          トークン
+          クレジット
         </NavLink>
       </nav>
     </header>
   )
 }
+

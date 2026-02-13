@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react'
+﻿import { useCallback, useEffect, useState } from 'react'
 import type { Session } from '@supabase/supabase-js'
 import { isAuthConfigured, supabase } from '../lib/supabaseClient'
 import { PURCHASE_PLANS } from '../lib/purchasePlans'
@@ -73,7 +73,7 @@ export function Purchase() {
     const data = await res.json().catch(() => ({}))
     if (!res.ok) {
       setTicketStatus('error')
-      setTicketMessage(data?.error || 'トークン取得に失敗しました。')
+      setTicketMessage(data?.error || 'クレジット取得に失敗しました。')
       setTicketCount(null)
       return
     }
@@ -185,8 +185,8 @@ export function Purchase() {
           {authMessage && <div className="auth-message">{authMessage}</div>}
           {session && (
             <div className="ticket-message">
-              {ticketStatus === 'loading' && 'トークン確認中...'}
-              {ticketStatus !== 'loading' && `トークン残り: ${ticketCount ?? 0}`}
+              {ticketStatus === 'loading' && 'クレジット確認中...'}
+              {ticketStatus !== 'loading' && `クレジット残り: ${ticketCount ?? 0}`}
               {ticketStatus === 'error' && ticketMessage ? ` / ${ticketMessage}` : ''}
             </div>
           )}
@@ -195,7 +195,7 @@ export function Purchase() {
         <section className="purchase-panel">
           <div className="panel-header">
             <div className="panel-title">
-              <h2>トークン購入</h2>
+              <h2>クレジット購入</h2>
               <span>必要な分だけ購入。</span>
             </div>
           </div>
@@ -204,7 +204,7 @@ export function Purchase() {
               <div key={plan.id} className="plan-card">
                 <div>
                   <div className="plan-label">{plan.label}</div>
-                  <div className="plan-tickets">{plan.tickets} トークン</div>
+                  <div className="plan-tickets">{plan.tickets} クレジット</div>
                 </div>
                 <div className="plan-price">¥{plan.price.toLocaleString()}</div>
                 <button
@@ -224,3 +224,4 @@ export function Purchase() {
     </div>
   )
 }
+

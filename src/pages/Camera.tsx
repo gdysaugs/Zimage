@@ -1,4 +1,4 @@
-import {
+﻿import {
   useCallback,
   useEffect,
   useMemo,
@@ -169,7 +169,7 @@ const isTicketShortage = (status: number, message: string) => {
     lowered.includes('insufficient_tickets') ||
     lowered.includes('insufficient tickets') ||
     lowered.includes('token不足') ||
-    lowered.includes('トークン') ||
+    lowered.includes('クレジット') ||
     lowered.includes('token') ||
     lowered.includes('credit')
   )
@@ -313,7 +313,7 @@ export function Camera() {
       const data = await res.json().catch(() => ({}))
       if (!res.ok) {
         setTicketStatus('error')
-        setTicketMessage(data?.error || 'トークン取得に失敗しました。')
+        setTicketMessage(data?.error || 'クレジット取得に失敗しました。')
         setTicketCount(null)
         return null
       }
@@ -368,7 +368,7 @@ export function Camera() {
         const message = normalizeErrorMessage(rawMessage)
         if (isTicketShortage(res.status, message)) {
           setShowTicketModal(true)
-          setStatusMessage('トークン不足')
+          setStatusMessage('クレジット不足')
           throw new Error('TICKET_SHORTAGE')
         }
         setErrorModalMessage(message)
@@ -403,7 +403,7 @@ export function Camera() {
         const message = normalizeErrorMessage(rawMessage)
         if (isTicketShortage(res.status, message)) {
           setShowTicketModal(true)
-          setStatusMessage('トークン不足')
+          setStatusMessage('クレジット不足')
           throw new Error('TICKET_SHORTAGE')
         }
         setErrorModalMessage(message)
@@ -419,7 +419,7 @@ export function Camera() {
         const normalized = normalizeErrorMessage(statusError)
         if (isTicketShortage(res.status, normalized)) {
           setShowTicketModal(true)
-          setStatusMessage('トークン不足')
+          setStatusMessage('クレジット不足')
           throw new Error('TICKET_SHORTAGE')
         }
       }
@@ -441,18 +441,18 @@ export function Camera() {
       return
     }
     if (ticketStatus === 'loading') {
-      setStatusMessage('トークン確認中...')
+      setStatusMessage('クレジット確認中...')
       return
     }
     if (accessToken) {
-      setStatusMessage('トークン確認中...')
+      setStatusMessage('クレジット確認中...')
       const latestCount = await fetchTickets(accessToken)
       if (latestCount !== null && latestCount < VIDEO_TICKET_COST) {
         setShowTicketModal(true)
         return
       }
     } else if (ticketCount === null) {
-      setStatusMessage('トークン確認中...')
+      setStatusMessage('クレジット確認中...')
       return
     } else if (ticketCount < VIDEO_TICKET_COST) {
       setShowTicketModal(true)
@@ -500,10 +500,10 @@ export function Camera() {
           if (message === 'TICKET_SHORTAGE') {
             setResults((prev) =>
               prev.map((item, itemIndex) =>
-                itemIndex === 0 ? { ...item, status: 'error' as const, error: 'トークン不足' } : item,
+                itemIndex === 0 ? { ...item, status: 'error' as const, error: 'クレジット不足' } : item,
               ),
             )
-            setStatusMessage('トークン不足')
+            setStatusMessage('クレジット不足')
             return
           }
           setResults((prev) =>
@@ -655,8 +655,8 @@ export function Camera() {
                 </div>
               </div>
               <div className="wizard-status">
-                {ticketStatus === 'loading' && 'トークン確認中...'}
-                {ticketStatus !== 'loading' && `トークン残り: ${ticketCount ?? 0}`}
+                {ticketStatus === 'loading' && 'クレジット確認中...'}
+                {ticketStatus !== 'loading' && `クレジット残り: ${ticketCount ?? 0}`}
                 {ticketStatus === 'error' && ticketMessage ? ` / ${ticketMessage}` : ''}
               </div>
               <h2>{stepTitles[step]}</h2>
@@ -766,14 +766,14 @@ export function Camera() {
       </div>{showTicketModal && (
         <div className="modal-overlay" role="dialog" aria-modal="true">
           <div className="modal-card">
-            <h3>トークン不足</h3>
-            <p>動画生成は1トークンです。購入ページへ移動しますか？</p>
+            <h3>クレジット不足</h3>
+            <p>動画生成は1クレジットです。購入ページへ移動しますか？</p>
             <div className="modal-actions">
               <button type="button" className="ghost-button" onClick={() => setShowTicketModal(false)}>
                 閉じる
               </button>
               <button type="button" className="primary-button" onClick={() => navigate('/purchase')}>
-                トークン購入
+                クレジット購入
               </button>
             </div>
           </div>
@@ -795,6 +795,7 @@ export function Camera() {
     </div>
   )
 }
+
 
 
 

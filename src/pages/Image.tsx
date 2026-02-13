@@ -1,4 +1,4 @@
-import {
+﻿import {
   useCallback,
   useEffect,
   useMemo,
@@ -309,7 +309,7 @@ export function Image() {
       const data = await res.json().catch(() => ({}))
       if (!res.ok) {
         setTicketStatus('error')
-        setTicketMessage(data?.error || 'トークンの取得に失敗しました。')
+        setTicketMessage(data?.error || 'クレジットの取得に失敗しました。')
         setTicketCount(null)
         return null
       }
@@ -362,7 +362,7 @@ export function Image() {
         const message = normalizeErrorMessage(rawMessage)
         if (isTicketShortage(res.status, message)) {
           setShowTicketModal(true)
-          setStatusMessage('トークン不足')
+          setStatusMessage('クレジット不足')
           throw new Error('TICKET_SHORTAGE')
         }
         setErrorModalMessage(message)
@@ -396,7 +396,7 @@ export function Image() {
         const message = normalizeErrorMessage(rawMessage)
         if (isTicketShortage(res.status, message)) {
           setShowTicketModal(true)
-          setStatusMessage('トークン不足')
+          setStatusMessage('クレジット不足')
           throw new Error('TICKET_SHORTAGE')
         }
         setErrorModalMessage(message)
@@ -443,8 +443,8 @@ export function Image() {
       } catch (error) {
         const message = normalizeErrorMessage(error instanceof Error ? error.message : error)
         if (message === 'TICKET_SHORTAGE') {
-          setResult({ id: makeId(), status: 'error', error: 'トークン不足' })
-          setStatusMessage('トークン不足')
+          setResult({ id: makeId(), status: 'error', error: 'クレジット不足' })
+          setStatusMessage('クレジット不足')
         } else {
           setResult({ id: makeId(), status: 'error', error: message })
           setStatusMessage(message)
@@ -464,18 +464,18 @@ export function Image() {
       return
     }
     if (ticketStatus === 'loading') {
-      setStatusMessage('トークンを確認中...')
+      setStatusMessage('クレジットを確認中...')
       return
     }
     if (accessToken) {
-      setStatusMessage('トークンを確認中...')
+      setStatusMessage('クレジットを確認中...')
       const latestCount = await fetchTickets(accessToken)
       if (latestCount !== null && latestCount < IMAGE_TICKET_COST) {
         setShowTicketModal(true)
         return
       }
     } else if (ticketCount === null) {
-      setStatusMessage('トークンを確認中...')
+      setStatusMessage('クレジットを確認中...')
       return
     } else if (ticketCount < IMAGE_TICKET_COST) {
       setShowTicketModal(true)
@@ -585,8 +585,8 @@ export function Image() {
           <div className="wizard-card wizard-card--step">
             <div className="wizard-stepper">
               <div className="wizard-status">
-                {ticketStatus === 'loading' && 'トークンを確認中...'}
-                {ticketStatus !== 'loading' && `トークン: ${ticketCount ?? 0}`}
+                {ticketStatus === 'loading' && 'クレジットを確認中...'}
+                {ticketStatus !== 'loading' && `クレジット: ${ticketCount ?? 0}`}
                 {ticketStatus === 'error' && ticketMessage ? ` / ${ticketMessage}` : ''}
               </div>
               <h2>画像編集</h2>
@@ -616,7 +616,7 @@ export function Image() {
                 rows={4}
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
-                placeholder="例: 帽子をかぶって金髪にして"
+                placeholder="例: 笑顔でピザを食べて"
               />
             </label>
 
@@ -677,8 +677,8 @@ export function Image() {
       {showTicketModal && (
         <div className="modal-overlay" role="dialog" aria-modal="true">
           <div className="modal-card">
-            <h3>トークン不足</h3>
-            <p>画像生成は1トークン必要です。購入ページへ移動しますか？</p>
+            <h3>クレジット不足</h3>
+            <p>画像生成は1クレジット必要です。購入ページへ移動しますか？</p>
             <div className="modal-actions">
               <button type="button" className="ghost-button" onClick={() => setShowTicketModal(false)}>
                 閉じる
@@ -707,3 +707,4 @@ export function Image() {
     </div>
   )
 }
+
