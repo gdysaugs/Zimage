@@ -357,7 +357,7 @@ const refundTicket = async (
 
   const { data: chargeEvent, error: chargeError } = await admin
     .from('ticket_events')
-    .select('usage_id')
+    .select('usage_id, user_id, email')
     .eq('usage_id', usageId)
     .maybeSingle()
 
@@ -365,7 +365,11 @@ const refundTicket = async (
     return { response: jsonResponse({ error: chargeError.message }, 500, corsHeaders) }
   }
 
-  if (!chargeEvent) {
+  const chargeUserId = chargeEvent?.user_id ? String(chargeEvent.user_id) : ''
+  const chargeEmail = chargeEvent?.email ? String(chargeEvent.email) : ''
+  const matchesUser = Boolean(chargeUserId && chargeUserId === user.id)
+  const matchesEmail = Boolean(chargeEmail && chargeEmail.toLowerCase() === email.toLowerCase())
+  if (!chargeEvent || (!matchesUser && !matchesEmail)) {
     return { skipped: true }
   }
 
@@ -421,6 +425,37 @@ const refundTicket = async (
     ticketsLeft: Number.isFinite(ticketsLeft) ? ticketsLeft : undefined,
     alreadyRefunded,
   }
+}
+
+const ensureUsageOwnership = async (
+  admin: ReturnType<typeof createClient>,
+  user: User,
+  usageId: string,
+  corsHeaders: HeadersInit,
+) => {
+  const { data: chargeEvent, error: chargeError } = await admin
+    .from('ticket_events')
+    .select('user_id, email')
+    .eq('usage_id', usageId)
+    .maybeSingle()
+
+  if (chargeError) {
+    return { response: jsonResponse({ error: chargeError.message }, 500, corsHeaders) }
+  }
+  if (!chargeEvent) {
+    return { response: jsonResponse({ error: 'Job not found.' }, 404, corsHeaders) }
+  }
+
+  const email = user.email ?? ''
+  const chargeUserId = chargeEvent.user_id ? String(chargeEvent.user_id) : ''
+  const chargeEmail = chargeEvent.email ? String(chargeEvent.email) : ''
+  const matchesUser = Boolean(chargeUserId && chargeUserId === user.id)
+  const matchesEmail = Boolean(email && chargeEmail && chargeEmail.toLowerCase() === email.toLowerCase())
+  if (!matchesUser && !matchesEmail) {
+    return { response: jsonResponse({ error: 'Job not found.' }, 404, corsHeaders) }
+  }
+
+  return { ok: true as const }
 }
 
 const hasOutputList = (value: unknown) => Array.isArray(value) && value.length > 0
@@ -602,6 +637,11 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
   }
   if (!env.RUNPOD_API_KEY) {
     return jsonResponse({ error: 'RUNPOD_API_KEY is not set.' }, 500, corsHeaders)
+  }
+
+  const ownership = await ensureUsageOwnership(auth.admin, auth.user, usageId, corsHeaders)
+  if ('response' in ownership) {
+    return ownership.response
   }
 
   const variant = variantParam ? normalizeVariant(variantParam) : inferVariantFromUsageId(usageId)

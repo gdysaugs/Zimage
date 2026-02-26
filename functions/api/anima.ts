@@ -245,6 +245,20 @@ const refundTicket = async (
   const email = user.email
   if (!email) return { skipped: true }
 
+  const { data: chargeEvent, error: chargeError } = await admin
+    .from('ticket_events')
+    .select('usage_id, user_id, email')
+    .eq('usage_id', usageId)
+    .maybeSingle()
+
+  if (chargeError) return { response: jsonResponse({ error: chargeError.message }, 500, corsHeaders) }
+
+  const chargeUserId = chargeEvent?.user_id ? String(chargeEvent.user_id) : ''
+  const chargeEmail = chargeEvent?.email ? String(chargeEvent.email) : ''
+  const matchesUser = Boolean(chargeUserId && chargeUserId === user.id)
+  const matchesEmail = Boolean(chargeEmail && chargeEmail.toLowerCase() === email.toLowerCase())
+  if (!chargeEvent || (!matchesUser && !matchesEmail)) return { skipped: true }
+
   const refundUsageId = `${usageId}:refund`
   const { data: existingRefund } = await admin
     .from('ticket_events')

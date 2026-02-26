@@ -1,0 +1,13 @@
+.git
+__pycache__/
+*.pyc
+.DS_Store
+models/loras/**
+models/unet/**
+!models/unet/test/
+!models/unet/test/wan22RemixT2VI2V_i2vHighV21-Q4_K_M.gguf
+!models/unet/test/wan22RemixT2VI2V_i2vLowV21-Q4_K_M.gguf
+models/clip/*
+!models/clip/nsfw_wan_umt5-xxl_fp8_scaled.safetensors
+models/vae/*
+!models/vae/Wan2_1_VAE_fp32.safetensors

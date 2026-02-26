@@ -1,0 +1,3071 @@
+﻿{
+    "id":  "403798bc-b837-48ea-afb8-b9a41c93286c",
+    "revision":  0,
+    "last_node_id":  203,
+    "last_link_id":  378,
+    "nodes":  [
+                  {
+                      "id":  120,
+                      "type":  "CLIPLoaderGGUF",
+                      "pos":  [
+                                  -1606.3748171689006,
+                                  -84.48324937041222
+                              ],
+                      "size":  [
+                                   270,
+                                   82
+                               ],
+                      "flags":  {
+
+                                },
+                      "order":  0,
+                      "mode":  0,
+                      "inputs":  [
+
+                                 ],
+                      "outputs":  [
+                                      {
+                                          "name":  "CLIP",
+                                          "type":  "CLIP",
+                                          "links":  [
+                                                        221,
+                                                        222
+                                                    ]
+                                      }
+                                  ],
+                      "properties":  {
+                                         "Node name for S\u0026R":  "CLIPLoaderGGUF"
+                                     },
+                      "widgets_values":  [
+                                             "nsfw_wan_umt5-xxl_fp8_scaled.safetensors",
+                                             "wan"
+                                         ]
+                  },
+                  {
+                      "id":  87,
+                      "type":  "VAEDecode",
+                      "pos":  [
+                                  835.9551655804738,
+                                  127.90510981131027
+                              ],
+                      "size":  [
+                                   210,
+                                   46
+                               ],
+                      "flags":  {
+
+                                },
+                      "order":  30,
+                      "mode":  0,
+                      "inputs":  [
+                                     {
+                                         "name":  "samples",
+                                         "type":  "LATENT",
+                                         "link":  291
+                                     },
+                                     {
+                                         "name":  "vae",
+                                         "type":  "VAE",
+                                         "link":  176
+                                     }
+                                 ],
+                      "outputs":  [
+                                      {
+                                          "name":  "IMAGE",
+                                          "type":  "IMAGE",
+                                          "slot_index":  0,
+                                          "links":  [
+                                                        223,
+                                                        307
+                                                    ]
+                                      }
+                                  ],
+                      "properties":  {
+                                         "Node name for S\u0026R":  "VAEDecode",
+                                         "cnr_id":  "comfy-core",
+                                         "ver":  "0.3.45",
+                                         "ue_properties":  {
+                                                               "widget_ue_connectable":  {
+
+                                                                                         },
+                                                               "version":  "7.1",
+                                                               "input_ue_unconnectable":  {
+
+                                                                                          }
+                                                           }
+                                     },
+                      "widgets_values":  [
+
+                                         ]
+                  },
+                  {
+                      "id":  159,
+                      "type":  "UpscaleModelLoader",
+                      "pos":  [
+                                  1823.8989252000201,
+                                  -656.084676199049
+                              ],
+                      "size":  [
+                                   270,
+                                   58
+                               ],
+                      "flags":  {
+
+                                },
+                      "order":  1,
+                      "mode":  0,
+                      "inputs":  [
+
+                                 ],
+                      "outputs":  [
+                                      {
+                                          "name":  "UPSCALE_MODEL",
+                                          "type":  "UPSCALE_MODEL",
+                                          "links":  [
+                                                        303
+                                                    ]
+                                      }
+                                  ],
+                      "properties":  {
+                                         "Node name for S\u0026R":  "UpscaleModelLoader"
+                                     },
+                      "widgets_values":  [
+                                             "2x-AnimeSharpV4_RCAN.safetensors"
+                                         ],
+                      "color":  "#432",
+                      "bgcolor":  "#653"
+                  },
+                  {
+                      "id":  150,
+                      "type":  "VHS_VideoCombine",
+                      "pos":  [
+                                  1819.0334624712327,
+                                  -428.76979104026384
+                              ],
+                      "size":  [
+                                   579.6687004394621,
+                                   334
+                               ],
+                      "flags":  {
+
+                                },
+                      "order":  34,
+                      "mode":  0,
+                      "inputs":  [
+                                     {
+                                         "name":  "images",
+                                         "type":  "IMAGE",
+                                         "link":  293
+                                     },
+                                     {
+                                         "name":  "audio",
+                                         "shape":  7,
+                                         "type":  "AUDIO",
+                                         "link":  null
+                                     },
+                                     {
+                                         "name":  "meta_batch",
+                                         "shape":  7,
+                                         "type":  "VHS_BatchManager",
+                                         "link":  null
+                                     },
+                                     {
+                                         "name":  "vae",
+                                         "shape":  7,
+                                         "type":  "VAE",
+                                         "link":  null
+                                     }
+                                 ],
+                      "outputs":  [
+                                      {
+                                          "name":  "Filenames",
+                                          "type":  "VHS_FILENAMES",
+                                          "links":  null
+                                      }
+                                  ],
+                      "properties":  {
+                                         "Node name for S\u0026R":  "VHS_VideoCombine",
+                                         "cnr_id":  "comfyui-videohelpersuite",
+                                         "ver":  "4c7858ddd5126f7293dc3c9f6e0fc4c263cde079",
+                                         "widget_ue_connectable":  {
+
+                                                                   }
+                                     },
+                      "widgets_values":  {
+                                             "frame_rate":  32,
+                                             "loop_count":  0,
+                                             "filename_prefix":  "video\\32FPS\\WAN2.2_14B_I2V_GGUF_32FPS",
+                                             "format":  "video/h264-mp4",
+                                             "pix_fmt":  "yuv420p",
+                                             "crf":  8,
+                                             "save_metadata":  true,
+                                             "trim_to_audio":  false,
+                                             "pingpong":  false,
+                                             "save_output":  true,
+                                             "videopreview":  {
+                                                                  "hidden":  true,
+                                                                  "paused":  false,
+                                                                  "params":  {
+                                                                                 "filename":  "WAN2.2_14B_I2V_GGUF_32FPS_00026.mp4",
+                                                                                 "subfolder":  "video\\32FPS",
+                                                                                 "type":  "output",
+                                                                                 "format":  "video/h264-mp4",
+                                                                                 "frame_rate":  32,
+                                                                                 "workflow":  "WAN2.2_14B_I2V_GGUF_32FPS_00026.png",
+                                                                                 "fullpath":  "D:\\ComfyUI\\output\\video\\32FPS\\WAN2.2_14B_I2V_GGUF_32FPS_00026.mp4"
+                                                                             },
+                                                                  "muted":  false
+                                                              }
+                                         },
+                      "shape":  2
+                  },
+                  {
+                      "id":  185,
+                      "type":  "SetNode",
+                      "pos":  [
+                                  162.519497698973,
+                                  -172.94093626501035
+                              ],
+                      "size":  [
+                                   210,
+                                   60
+                               ],
+                      "flags":  {
+                                    "collapsed":  true
+                                },
+                      "order":  22,
+                      "mode":  0,
+                      "inputs":  [
+                                     {
+                                         "name":  "INT",
+                                         "type":  "INT",
+                                         "link":  334
+                                     }
+                                 ],
+                      "outputs":  [
+                                      {
+                                          "name":  "*",
+                                          "type":  "*",
+                                          "links":  null
+                                      }
+                                  ],
+                      "title":  "Set_WIDTH",
+                      "properties":  {
+                                         "previousName":  "WIDTH"
+                                     },
+                      "widgets_values":  [
+                                             "WIDTH"
+                                         ],
+                      "color":  "#1b4669",
+                      "bgcolor":  "#29699c"
+                  },
+                  {
+                      "id":  186,
+                      "type":  "SetNode",
+                      "pos":  [
+                                  154.63971155832746,
+                                  -64.59387683113007
+                              ],
+                      "size":  [
+                                   210,
+                                   60
+                               ],
+                      "flags":  {
+                                    "collapsed":  true
+                                },
+                      "order":  23,
+                      "mode":  0,
+                      "inputs":  [
+                                     {
+                                         "name":  "INT",
+                                         "type":  "INT",
+                                         "link":  335
+                                     }
+                                 ],
+                      "outputs":  [
+                                      {
+                                          "name":  "*",
+                                          "type":  "*",
+                                          "links":  null
+                                      }
+                                  ],
+                      "title":  "Set_HEIGHT",
+                      "properties":  {
+                                         "previousName":  "HEIGHT"
+                                     },
+                      "widgets_values":  [
+                                             "HEIGHT"
+                                         ],
+                      "color":  "#1b4669",
+                      "bgcolor":  "#29699c"
+                  },
+                  {
+                      "id":  161,
+                      "type":  "MarkdownNote",
+                      "pos":  [
+                                  1149.265694140952,
+                                  -728.206239274685
+                              ],
+                      "size":  [
+                                   616.070921181883,
+                                   153.5510676606945
+                               ],
+                      "flags":  {
+
+                                },
+                      "order":  2,
+                      "mode":  0,
+                      "inputs":  [
+
+                                 ],
+                      "outputs":  [
+
+                                  ],
+                      "title":  "Step 5.1 \u0026 6 - Upscale and Frame Interpolation",
+                      "properties":  {
+
+                                     },
+                      "widgets_values":  [
+                                             "**DISABLE THESE WHILE TESTING OUTPUT (CTRL+B)**\n\n**UPSCALE**:\n\n- [2x AnimeSharpV4](https://openmodeldb.info/models/2x-AnimeSharpV4)\n\nThis model works great with anime images/videos. Feel free try other models.\n\n**FRAME INTERPOLATION**\n\nFree FPS increase! If you do not like the results, you can disable the frame interpolation and just save the upscaled video.\n\n"
+                                         ],
+                      "color":  "#432",
+                      "bgcolor":  "#653"
+                  },
+                  {
+                      "id":  90,
+                      "type":  "VAELoader",
+                      "pos":  [
+                                  -1604.2735954395223,
+                                  70.14377565505892
+                              ],
+                      "size":  [
+                                   344.731689453125,
+                                   59.98149108886719
+                               ],
+                      "flags":  {
+
+                                },
+                      "order":  3,
+                      "mode":  0,
+                      "inputs":  [
+
+                                 ],
+                      "outputs":  [
+                                      {
+                                          "name":  "VAE",
+                                          "type":  "VAE",
+                                          "slot_index":  0,
+                                          "links":  [
+                                                        176,
+                                                        346
+                                                    ]
+                                      }
+                                  ],
+                      "properties":  {
+                                         "Node name for S\u0026R":  "VAELoader",
+                                         "cnr_id":  "comfy-core",
+                                         "ver":  "0.3.45",
+                                         "models":  [
+                                                        {
+                                                            "name":  "wan_2.1_vae.safetensors",
+                                                            "url":  "https://huggingface.co/Comfy-Org/Wan_2.2_ComfyUI_Repackaged/resolve/main/split_files/vae/wan_2.1_vae.safetensors",
+                                                            "directory":  "vae"
+                                                        }
+                                                    ],
+                                         "ue_properties":  {
+                                                               "widget_ue_connectable":  {
+
+                                                                                         },
+                                                               "version":  "7.1",
+                                                               "input_ue_unconnectable":  {
+
+                                                                                          }
+                                                           }
+                                     },
+                      "widgets_values":  [
+                                             "Wan2_1_VAE_fp32.safetensors"
+                                         ]
+                  },
+                  {
+                      "id":  132,
+                      "type":  "MarkdownNote",
+                      "pos":  [
+                                  -793.9374771027176,
+                                  338.9333091565087
+                              ],
+                      "size":  [
+                                   807.7250215538008,
+                                   188.64301655669726
+                               ],
+                      "flags":  {
+
+                                },
+                      "order":  4,
+                      "mode":  0,
+                      "inputs":  [
+
+                                 ],
+                      "outputs":  [
+
+                                  ],
+                      "title":  "Step 3 - Image \u0026 Prompt",
+                      "properties":  {
+
+                                     },
+                      "widgets_values":  [
+                                             "**START IMAGE**:\n\nThe image proportions should be the same as video generation proportions. For example, if you are putting a 16:9 image, your generation proportion should be 16:9. Otherwise, weird things might happen. I always recommend putting a higher resolution image, it will be auto downsized to the generation resolution.\n\n**PROMPTS**:\n\nCheck CIVITAI generations for more prompts and keywords for the LORAs you are using. As for the negative prompt, I have no idea what\u0027s best. Chinese? English? Less keywords? More keywords? No idea."
+                                         ],
+                      "color":  "#432",
+                      "bgcolor":  "#653"
+                  },
+                  {
+                      "id":  187,
+                      "type":  "GetNode",
+                      "pos":  [
+                                  -1160.163353111747,
+                                  551.1304768171093
+                              ],
+                      "size":  [
+                                   210,
+                                   60
+                               ],
+                      "flags":  {
+                                    "collapsed":  true
+                                },
+                      "order":  5,
+                      "mode":  0,
+                      "inputs":  [
+
+                                 ],
+                      "outputs":  [
+                                      {
+                                          "name":  "INT",
+                                          "type":  "INT",
+                                          "links":  [
+                                                        360
+                                                    ]
+                                      }
+                                  ],
+                      "title":  "Get_HEIGHT",
+                      "properties":  {
+
+                                     },
+                      "widgets_values":  [
+                                             "HEIGHT"
+                                         ],
+                      "color":  "#1b4669",
+                      "bgcolor":  "#29699c"
+                  },
+                  {
+                      "id":  188,
+                      "type":  "GetNode",
+                      "pos":  [
+                                  -989.9603227903083,
+                                  553.0473711538746
+                              ],
+                      "size":  [
+                                   210,
+                                   60
+                               ],
+                      "flags":  {
+                                    "collapsed":  true
+                                },
+                      "order":  6,
+                      "mode":  0,
+                      "inputs":  [
+
+                                 ],
+                      "outputs":  [
+                                      {
+                                          "name":  "INT",
+                                          "type":  "INT",
+                                          "links":  [
+                                                        359
+                                                    ]
+                                      }
+                                  ],
+                      "title":  "Get_WIDTH",
+                      "properties":  {
+
+                                     },
+                      "widgets_values":  [
+                                             "WIDTH"
+                                         ],
+                      "color":  "#1b4669",
+                      "bgcolor":  "#29699c"
+                  },
+                  {
+                      "id":  149,
+                      "type":  "RIFE VFI",
+                      "pos":  [
+                                  1838.8030778228506,
+                                  -472.56922450372474
+                              ],
+                      "size":  [
+                                   319.1258239746094,
+                                   200
+                               ],
+                      "flags":  {
+                                    "collapsed":  true
+                                },
+                      "order":  33,
+                      "mode":  0,
+                      "inputs":  [
+                                     {
+                                         "name":  "frames",
+                                         "type":  "IMAGE",
+                                         "link":  311
+                                     },
+                                     {
+                                         "name":  "optional_interpolation_states",
+                                         "shape":  7,
+                                         "type":  "INTERPOLATION_STATES",
+                                         "link":  null
+                                     }
+                                 ],
+                      "outputs":  [
+                                      {
+                                          "name":  "IMAGE",
+                                          "type":  "IMAGE",
+                                          "slot_index":  0,
+                                          "links":  [
+                                                        293
+                                                    ]
+                                      }
+                                  ],
+                      "title":  "Frame Interpolation (RIFE)",
+                      "properties":  {
+                                         "Node name for S\u0026R":  "RIFE VFI",
+                                         "cnr_id":  "comfyui-frame-interpolation",
+                                         "ver":  "1.0.6",
+                                         "widget_ue_connectable":  {
+
+                                                                   }
+                                     },
+                      "widgets_values":  [
+                                             "rife49.pth",
+                                             10,
+                                             2,
+                                             false,
+                                             true,
+                                             1
+                                         ],
+                      "shape":  2
+                  },
+                  {
+                      "id":  86,
+                      "type":  "KSamplerAdvanced",
+                      "pos":  [
+                                  424.16697844521417,
+                                  -471.9051205689589
+                              ],
+                      "size":  [
+                                   304.748046875,
+                                   546
+                               ],
+                      "flags":  {
+
+                                },
+                      "order":  27,
+                      "mode":  0,
+                      "inputs":  [
+                                     {
+                                         "name":  "model",
+                                         "type":  "MODEL",
+                                         "link":  375
+                                     },
+                                     {
+                                         "name":  "positive",
+                                         "type":  "CONDITIONING",
+                                         "link":  351
+                                     },
+                                     {
+                                         "name":  "negative",
+                                         "type":  "CONDITIONING",
+                                         "link":  352
+                                     },
+                                     {
+                                         "name":  "latent_image",
+                                         "type":  "LATENT",
+                                         "link":  353
+                                     },
+                                     {
+                                         "name":  "noise_seed",
+                                         "type":  "INT",
+                                         "widget":  {
+                                                        "name":  "noise_seed"
+                                                    },
+                                         "link":  301
+                                     }
+                                 ],
+                      "outputs":  [
+                                      {
+                                          "name":  "LATENT",
+                                          "type":  "LATENT",
+                                          "links":  [
+                                                        170
+                                                    ]
+                                      }
+                                  ],
+                      "properties":  {
+                                         "Node name for S\u0026R":  "KSamplerAdvanced",
+                                         "cnr_id":  "comfy-core",
+                                         "ver":  "0.3.45",
+                                         "ue_properties":  {
+                                                               "widget_ue_connectable":  {
+
+                                                                                         },
+                                                               "version":  "7.1",
+                                                               "input_ue_unconnectable":  {
+
+                                                                                          }
+                                                           }
+                                     },
+                      "widgets_values":  [
+                                             "enable",
+                                             512578971508089,
+                                             "randomize",
+                                             4,
+                                             1,
+                                             "euler",
+                                             "simple",
+                                             0,
+                                             2,
+                                             "enable"
+                                         ]
+                  },
+                  {
+                      "id":  85,
+                      "type":  "KSamplerAdvanced",
+                      "pos":  [
+                                  783.3728457379474,
+                                  -471.8014522622481
+                              ],
+                      "size":  [
+                                   304.748046875,
+                                   546
+                               ],
+                      "flags":  {
+
+                                },
+                      "order":  28,
+                      "mode":  0,
+                      "inputs":  [
+                                     {
+                                         "name":  "model",
+                                         "type":  "MODEL",
+                                         "link":  378
+                                     },
+                                     {
+                                         "name":  "positive",
+                                         "type":  "CONDITIONING",
+                                         "link":  354
+                                     },
+                                     {
+                                         "name":  "negative",
+                                         "type":  "CONDITIONING",
+                                         "link":  355
+                                     },
+                                     {
+                                         "name":  "latent_image",
+                                         "type":  "LATENT",
+                                         "link":  170
+                                     }
+                                 ],
+                      "outputs":  [
+                                      {
+                                          "name":  "LATENT",
+                                          "type":  "LATENT",
+                                          "links":  [
+                                                        290
+                                                    ]
+                                      }
+                                  ],
+                      "properties":  {
+                                         "Node name for S\u0026R":  "KSamplerAdvanced",
+                                         "cnr_id":  "comfy-core",
+                                         "ver":  "0.3.45",
+                                         "ue_properties":  {
+                                                               "widget_ue_connectable":  {
+
+                                                                                         },
+                                                               "version":  "7.1",
+                                                               "input_ue_unconnectable":  {
+
+                                                                                          }
+                                                           }
+                                     },
+                      "widgets_values":  [
+                                             "disable",
+                                             0,
+                                             "fixed",
+                                             4,
+                                             1,
+                                             "euler",
+                                             "simple",
+                                             2,
+                                             4,
+                                             "disable"
+                                         ]
+                  },
+                  {
+                      "id":  146,
+                      "type":  "easy cleanGpuUsed",
+                      "pos":  [
+                                  632.8558919100088,
+                                  124.24698497701377
+                              ],
+                      "size":  [
+                                   173.9761868866233,
+                                   27.036683067132685
+                               ],
+                      "flags":  {
+                                    "collapsed":  false
+                                },
+                      "order":  29,
+                      "mode":  0,
+                      "inputs":  [
+                                     {
+                                         "name":  "anything",
+                                         "type":  "*",
+                                         "link":  290
+                                     }
+                                 ],
+                      "outputs":  [
+                                      {
+                                          "name":  "output",
+                                          "type":  "*",
+                                          "links":  [
+                                                        291
+                                                    ]
+                                      }
+                                  ],
+                      "properties":  {
+                                         "Node name for S\u0026R":  "easy cleanGpuUsed",
+                                         "cnr_id":  "comfyui-easy-use",
+                                         "ver":  "de92038f88317699f314be85e5c7af84f1ab9c3a",
+                                         "widget_ue_connectable":  {
+
+                                                                   }
+                                     },
+                      "widgets_values":  [
+
+                                         ],
+                      "shape":  2
+                  },
+                  {
+                      "id":  116,
+                      "type":  "UnetLoaderGGUF",
+                      "pos":  [
+                                  -1610.0024475543285,
+                                  -480.2170451213794
+                              ],
+                      "size":  [
+                                   346.92641219805637,
+                                   77.50247069809888
+                               ],
+                      "flags":  {
+
+                                },
+                      "order":  7,
+                      "mode":  0,
+                      "inputs":  [
+
+                                 ],
+                      "outputs":  [
+                                      {
+                                          "name":  "MODEL",
+                                          "type":  "MODEL",
+                                          "links":  [
+                                                        285
+                                                    ]
+                                      }
+                                  ],
+                      "title":  "Unet Loader (GGUF) - High",
+                      "properties":  {
+                                         "Node name for S\u0026R":  "UnetLoaderGGUF"
+                                     },
+                      "widgets_values":  [
+                                             "wan22RemixT2VI2V_i2vHighV21-Q4_K_M.gguf"
+                                         ]
+                  },
+                  {
+                      "id":  117,
+                      "type":  "UnetLoaderGGUF",
+                      "pos":  [
+                                  -1612.9479197125486,
+                                  -343.1958182853538
+                              ],
+                      "size":  [
+                                   343.6760004150401,
+                                   62.33388237735528
+                               ],
+                      "flags":  {
+
+                                },
+                      "order":  8,
+                      "mode":  0,
+                      "inputs":  [
+
+                                 ],
+                      "outputs":  [
+                                      {
+                                          "name":  "MODEL",
+                                          "type":  "MODEL",
+                                          "links":  [
+                                                        288
+                                                    ]
+                                      }
+                                  ],
+                      "title":  "Unet Loader (GGUF) - Low",
+                      "properties":  {
+                                         "Node name for S\u0026R":  "UnetLoaderGGUF"
+                                     },
+                      "widgets_values":  [
+                                             "wan22RemixT2VI2V_i2vLowV21-Q4_K_M.gguf"
+                                         ]
+                  },
+                  {
+                      "id":  89,
+                      "type":  "CLIPTextEncode",
+                      "pos":  [
+                                  -807.8522978584666,
+                                  149.55432479712675
+                              ],
+                      "size":  [
+                                   829.2983846768811,
+                                   140.263162364614
+                               ],
+                      "flags":  {
+
+                                },
+                      "order":  18,
+                      "mode":  0,
+                      "inputs":  [
+                                     {
+                                         "name":  "clip",
+                                         "type":  "CLIP",
+                                         "link":  222
+                                     }
+                                 ],
+                      "outputs":  [
+                                      {
+                                          "name":  "CONDITIONING",
+                                          "type":  "CONDITIONING",
+                                          "slot_index":  0,
+                                          "links":  [
+                                                        345,
+                                                        374,
+                                                        377
+                                                    ]
+                                      }
+                                  ],
+                      "title":  "CLIP Text Encode (Negative Prompt)",
+                      "properties":  {
+                                         "Node name for S\u0026R":  "CLIPTextEncode",
+                                         "cnr_id":  "comfy-core",
+                                         "ver":  "0.3.45",
+                                         "ue_properties":  {
+                                                               "widget_ue_connectable":  {
+
+                                                                                         },
+                                                               "version":  "7.1",
+                                                               "input_ue_unconnectable":  {
+
+                                                                                          }
+                                                           }
+                                     },
+                      "widgets_values":  [
+                                             "濶ｲ隹・乙荳ｽ・瑚ｿ・屎・碁撕諤・ｼ檎ｻ・鰍讓｡邉贋ｸ肴ｸ・ｼ悟ｭ怜ｹ包ｼ碁｣取ｼ・御ｽ懷刀・檎判菴懶ｼ檎判髱｢・碁撕豁｢・梧紛菴灘書轣ｰ・梧怙蟾ｮ雍ｨ驥擾ｼ御ｽ手ｴｨ驥擾ｼ繰PEG蜴狗ｼｩ谿狗蕗・御ｸ鷹刹逧・ｼ梧ｮ狗ｼｺ逧・ｼ悟､壻ｽ咏噪謇区欠・檎判蠕嶺ｸ榊･ｽ逧・焔驛ｨ・檎判蠕嶺ｸ榊･ｽ逧・┷驛ｨ・檎丙蠖｢逧・ｼ梧ｯ∝ｮｹ逧・ｼ悟ｽ｢諤∫丙蠖｢逧・い菴難ｼ梧焔謖・檮蜷茨ｼ碁撕豁｢荳榊勘逧・判髱｢・梧揩荵ｱ逧・レ譎ｯ・御ｸ画擅閻ｿ・瑚レ譎ｯ莠ｺ蠕亥､夲ｼ悟堤捩襍ｰ・碁ｩｬ襍帛・・悟今騾壼ｴｩ蝮擾ｼ檎ｻ伜宛髞呵ｯｯ・檎ｺｿ譚｡髞吩ｹｱ・梧ｶるｸｦ諢滂ｼ靴G諢溯ｿ・ｼｺ・悟｡第侭雍ｨ諢滂ｼ窟I諢溷､ｪ蠑ｺ・悟勘菴懷Ψ遑ｬ・梧惠蛛ｶ闊ｬ逧・勘菴懶ｼ悟漕譚ｿ逧・ｧｿ蜉ｿ・檎ｼｺ荵丞勘諤∵─・悟∞隨托ｼ碁擇驛ｨ蜒ｵ遑ｬ・瑚｡ｨ諠・漕貊橸ｼ悟勘諤∽ｸ｢螟ｱ・悟勘逕ｻ諢溽ｼｺ螟ｱ・御ｽ主ｸｧ邇・─・悟勘菴懈瀦陬ゑｼ梧ｮ句ｽｱ蠑ょｸｸ・瑚ｺｫ菴灘今鬘ｿ・悟､ｴ霄ｫ豈比ｾ区ｪ蠑ゑｼ檎愍逹帶ｨ｡邉奇ｼ御ｺ泌ｮ倬漠菴搾ｼ碁㍾螟咲噪霄ｫ菴馴Κ菴搾ｼ瑚い菴鍋ｼｺ螟ｱ・悟｡碁匚逧・坩閧､・碁剰ｧ・レ譎ｯ髞呵ｯｯ・悟・蠖ｱ荳榊粋逅・ｼ悟惻譎ｯ霑晏柱・瑚｡｣譛榊・遨ｺ豸亥､ｱ・御ｸ崎ｿ櫁ｴｯ逧・｡｣譛搾ｼ檎丙蠖｢逕滓ｮ門勣螳假ｼ檎ｪ∝序逕滓ｮ門勣螳假ｼ悟､壻ｽ咏噪逕滓ｮ門勣螳假ｼ檎ｪ∝序髦ｴ闌趣ｼ檎丙蠖｢髦ｴ闌趣ｼ悟､壻ｽ咏噪髦ｴ闌趣ｼ檎判蠕嶺ｸ榊･ｽ逧・亢闌趣ｼ檎ｪ∝序髦ｴ驕難ｼ檎丙蠖｢髦ｴ驕難ｼ悟､壻ｽ咏噪髦ｴ驕難ｼ檎判蠕嶺ｸ榊･ｽ逧・亢驕難ｼ檎判蠕嶺ｸ榊･ｽ逧・函谿門勣螳假ｼ悟･ｳ莠ｺ豐｡譛蛾亢驕難ｼ檎塙莠ｺ髟ｿ蜃ｺ髦ｴ驕難ｼ檎塙莠ｺ豐｡譛蛾亢闌趣ｼ檎ｼ捺・霑仙勘逧・亢闌趣ｼ瑚ｿ仙勘郛捺・逧・亢闌趣ｼ檎丙蠖｢蝌ｴ蜚・ｼ檎ｪ∝序蝌ｴ蜚・ｼ檎判蠕嶺ｸ榊･ｽ逧・亢蜚・ｼ檎丙蠖｢蝌ｴ蟾ｴ・檎ｪ∝序蝌ｴ蟾ｴ・檎判蠕嶺ｸ榊･ｽ逧・亢蟾ｴ・悟､壻ｽ咏噪迚咎ｽｿ・檎ｼｺ螟ｱ逧・甥鮨ｿ・御ｸ榊ｯｹ遘ｰ蝌ｴ蜚・ｼ御ｸ崎・辟ｶ逧・哨郤｢・悟哨郤｢豸よ柑讓｡邉奇ｼ御ｸ崎ｿ櫁ｴｯ逧・亢蜚・ｼ檎判蠕嶺ｸ榊･ｽ逧・・・檎ｪ∝序逧・・・檎丙蠖｢逧・・・梧ｷｱ濶ｲ蝌ｴ蜚・ｼ梧ｷｱ濶ｲ蜿｣郤｢・檎ｺ｢濶ｲ蜿｣郤｢・檎ｺ｢濶ｲ蝌ｴ蜚・ｼ檎丙蠖｢逧・┷・檎ｪ∝序逧・┷・檎判蠕嶺ｸ榊･ｽ逧・┷・瑚┷驛ｨ蜿伜ｽ｢・悟､壼ｼ閼ｸ・瑚┷蝙倶ｸ堺ｸ閾ｴ・御ｺｺ迚ｩ霄ｫ莉ｽ蜿伜喧・瑚┷驛ｨ讓｡邉奇ｼ碁擇驛ｨ髣ｪ辜・ｼ檎丙蜿俶焔驛ｨ・檎ｪ∝序謇矩Κ・悟､壻ｽ咏噪謇矩Κ・瑚い菴鍋ｩｿ讓｡・檎丙蜿倡愍逹幢ｼ檎ｪ∝序逵ｼ逹幢ｼ檎判蠕嶺ｸ榊･ｽ逧・愍逹幢ｼ檎愍逹帑ｸ堺ｸ閾ｴ・悟ワ邏蛹・ 髞ｯ鮨ｿ, 邊礼ｳ呵ｾｹ郛・ 髞ｯ鮨ｿ霎ｹ郛・ 莨ｪ蠖ｱ, 蝎ｪ轤ｹ, 讓｡邉顔ｺｿ譚｡, 謇ｭ譖ｲ扈・鰍, 髞占ｾｹ, 郤ｿ譚｡謚門勘, 螟ｱ辟ｦ, 菴主・霎ｨ邇・ 髞呵ｯｯ郤ｹ逅・ｼ檎鴫螳樒噪閼ｸ・檎悄螳樒抬豈幢ｼ檎鴫螳樒抬豈幢ｼ・D逹ｫ豈幢ｼ檎悄螳樒噪閼ｸ・檎悄螳樔ｺｺ迚ｩ・檎鴫螳樔ｺｺ迚ｩ・・D莠ｺ迚ｩ."
+                                         ],
+                      "color":  "#322",
+                      "bgcolor":  "#533"
+                  },
+                  {
+                      "id":  184,
+                      "type":  "INTConstant",
+                      "pos":  [
+                                  111.9508643178039,
+                                  -189.78399542119058
+                              ],
+                      "size":  [
+                                   210,
+                                   58
+                               ],
+                      "flags":  {
+
+                                },
+                      "order":  9,
+                      "mode":  0,
+                      "inputs":  [
+
+                                 ],
+                      "outputs":  [
+                                      {
+                                          "name":  "value",
+                                          "type":  "INT",
+                                          "links":  [
+                                                        334,
+                                                        363
+                                                    ]
+                                      }
+                                  ],
+                      "title":  "WIDTH",
+                      "properties":  {
+                                         "Node name for S\u0026R":  "INTConstant"
+                                     },
+                      "widgets_values":  [
+                                             960
+                                         ],
+                      "color":  "#1b4669",
+                      "bgcolor":  "#29699c"
+                  },
+                  {
+                      "id":  183,
+                      "type":  "INTConstant",
+                      "pos":  [
+                                  110.33659895581354,
+                                  -83.30147410229111
+                              ],
+                      "size":  [
+                                   210,
+                                   58
+                               ],
+                      "flags":  {
+
+                                },
+                      "order":  10,
+                      "mode":  0,
+                      "inputs":  [
+
+                                 ],
+                      "outputs":  [
+                                      {
+                                          "name":  "value",
+                                          "type":  "INT",
+                                          "links":  [
+                                                        335,
+                                                        357
+                                                    ]
+                                      }
+                                  ],
+                      "title":  "HEIGHT",
+                      "properties":  {
+                                         "Node name for S\u0026R":  "INTConstant"
+                                     },
+                      "widgets_values":  [
+                                             544
+                                         ],
+                      "color":  "#1b4669",
+                      "bgcolor":  "#29699c"
+                  },
+                  {
+                      "id":  121,
+                      "type":  "VHS_VideoCombine",
+                      "pos":  [
+                                  1172.1145750559751,
+                                  -471.6714169955155
+                              ],
+                      "size":  [
+                                   565.5962852942166,
+                                   657.1712283333894
+                               ],
+                      "flags":  {
+
+                                },
+                      "order":  31,
+                      "mode":  0,
+                      "inputs":  [
+                                     {
+                                         "name":  "images",
+                                         "type":  "IMAGE",
+                                         "link":  223
+                                     },
+                                     {
+                                         "name":  "audio",
+                                         "shape":  7,
+                                         "type":  "AUDIO",
+                                         "link":  null
+                                     },
+                                     {
+                                         "name":  "meta_batch",
+                                         "shape":  7,
+                                         "type":  "VHS_BatchManager",
+                                         "link":  null
+                                     },
+                                     {
+                                         "name":  "vae",
+                                         "shape":  7,
+                                         "type":  "VAE",
+                                         "link":  null
+                                     }
+                                 ],
+                      "outputs":  [
+                                      {
+                                          "name":  "Filenames",
+                                          "type":  "VHS_FILENAMES",
+                                          "links":  null
+                                      }
+                                  ],
+                      "properties":  {
+                                         "Node name for S\u0026R":  "VHS_VideoCombine",
+                                         "cnr_id":  "comfyui-videohelpersuite",
+                                         "ver":  "6e7f63867584bb1fb4944d36172e7f98436da9a1",
+                                         "ue_properties":  {
+                                                               "widget_ue_connectable":  {
+
+                                                                                         },
+                                                               "version":  "7.3",
+                                                               "input_ue_unconnectable":  {
+
+                                                                                          }
+                                                           }
+                                     },
+                      "widgets_values":  {
+                                             "frame_rate":  16,
+                                             "loop_count":  0,
+                                             "filename_prefix":  "video\\16FPS\\WAN2.2_14B_I2V_GGUF_16FPS",
+                                             "format":  "video/h264-mp4",
+                                             "pix_fmt":  "yuv420p",
+                                             "crf":  8,
+                                             "save_metadata":  true,
+                                             "trim_to_audio":  false,
+                                             "pingpong":  false,
+                                             "save_output":  true,
+                                             "videopreview":  {
+                                                                  "hidden":  false,
+                                                                  "paused":  false,
+                                                                  "params":  {
+                                                                                 "filename":  "WAN2.2_14B_I2V_GGUF_16FPS_00032.mp4",
+                                                                                 "subfolder":  "video\\16FPS",
+                                                                                 "type":  "output",
+                                                                                 "format":  "video/h264-mp4",
+                                                                                 "frame_rate":  16,
+                                                                                 "workflow":  "WAN2.2_14B_I2V_GGUF_16FPS_00032.png",
+                                                                                 "fullpath":  "D:\\ComfyUI\\output\\video\\16FPS\\WAN2.2_14B_I2V_GGUF_16FPS_00032.mp4"
+                                                                             },
+                                                                  "muted":  false
+                                                              }
+                                         }
+                  },
+                  {
+                      "id":  190,
+                      "type":  "PainterI2V",
+                      "pos":  [
+                                  110.30891373373206,
+                                  -474.1920019828734
+                              ],
+                      "size":  [
+                                   270,
+                                   234
+                               ],
+                      "flags":  {
+
+                                },
+                      "order":  24,
+                      "mode":  0,
+                      "inputs":  [
+                                     {
+                                         "name":  "positive",
+                                         "type":  "CONDITIONING",
+                                         "link":  344
+                                     },
+                                     {
+                                         "name":  "negative",
+                                         "type":  "CONDITIONING",
+                                         "link":  345
+                                     },
+                                     {
+                                         "name":  "vae",
+                                         "type":  "VAE",
+                                         "link":  346
+                                     },
+                                     {
+                                         "name":  "clip_vision_output",
+                                         "shape":  7,
+                                         "type":  "CLIP_VISION_OUTPUT",
+                                         "link":  null
+                                     },
+                                     {
+                                         "name":  "start_image",
+                                         "shape":  7,
+                                         "type":  "IMAGE",
+                                         "link":  362
+                                     },
+                                     {
+                                         "name":  "width",
+                                         "type":  "INT",
+                                         "widget":  {
+                                                        "name":  "width"
+                                                    },
+                                         "link":  363
+                                     },
+                                     {
+                                         "name":  "height",
+                                         "type":  "INT",
+                                         "widget":  {
+                                                        "name":  "height"
+                                                    },
+                                         "link":  357
+                                     }
+                                 ],
+                      "outputs":  [
+                                      {
+                                          "name":  "positive",
+                                          "type":  "CONDITIONING",
+                                          "links":  [
+                                                        351,
+                                                        354
+                                                    ]
+                                      },
+                                      {
+                                          "name":  "negative",
+                                          "type":  "CONDITIONING",
+                                          "links":  [
+                                                        352,
+                                                        355
+                                                    ]
+                                      },
+                                      {
+                                          "name":  "latent",
+                                          "type":  "LATENT",
+                                          "links":  [
+                                                        353
+                                                    ]
+                                      }
+                                  ],
+                      "properties":  {
+                                         "Node name for S\u0026R":  "PainterI2V"
+                                     },
+                      "widgets_values":  [
+                                             512,
+                                             768,
+                                             81,
+                                             1,
+                                             1
+                                         ]
+                  },
+                  {
+                      "id":  203,
+                      "type":  "MarkdownNote",
+                      "pos":  [
+                                  -277.66334119120285,
+                                  -725.2328536249153
+                              ],
+                      "size":  [
+                                   312.7206055523644,
+                                   156.6022255985054
+                               ],
+                      "flags":  {
+
+                                },
+                      "order":  11,
+                      "mode":  0,
+                      "inputs":  [
+
+                                 ],
+                      "outputs":  [
+
+                                  ],
+                      "title":  "Step 2.1 - SHIFT",
+                      "properties":  {
+
+                                     },
+                      "widgets_values":  [
+                                             "**SAGE + TORCH + NAG**:\n\nNo need to touch these inside the grouped nodes. Leave them be.\n\n**SHIFT**:\n\nYou can change both values to 8.00 if you need more motion, you will lose some visual fidelity but some NSFW actions need it. Otherwise, keep it at 5.00."
+                                         ],
+                      "color":  "#432",
+                      "bgcolor":  "#653"
+                  },
+                  {
+                      "id":  131,
+                      "type":  "MarkdownNote",
+                      "pos":  [
+                                  -1179.0497246852988,
+                                  -804.4012948874201
+                              ],
+                      "size":  [
+                                   877.7148882965759,
+                                   233.60922651845436
+                               ],
+                      "flags":  {
+
+                                },
+                      "order":  12,
+                      "mode":  0,
+                      "inputs":  [
+
+                                 ],
+                      "outputs":  [
+
+                                  ],
+                      "title":  "Step 2 - LORAs",
+                      "properties":  {
+
+                                     },
+                      "widgets_values":  [
+                                             "**LIGHTX2V**:\n\nDO NOT USE ANY LIGHTNING/SPEED LORA. IT IS ALREADY BAKED IN THE MODEL.\n\n**FAVORITE LORAS**:\n\n- [WAN General NSFW model](https://civitai.com/models/1307155/wan-22-experimental-wan-general-nsfw-model) **OR** [WAN DR34ML4Y - All-In-One NSFW](https://civitai.com/models/1811313/wan-dr34ml4y-all-in-one-nsfw)\n- Additional smoothing XXX lora: [SmoothMix Animations XXX](https://civitai.com/models/2040641?modelVersionId=2376136)\n\nAll-in-one general NSFW LORA. Don\u0027t forget to download both HIGH and LOW versions. You can use this LORA together with other LORAs; **however**, not every other LORA works well together. You need to test it.\n\nIf you want to add more LORAs, just add them~!\n\n- [Ultimate DeepThroat I2V Wan2.2 Video LoRa - K3NK](https://civitai.com/models/1874811/ultimate-deepthroat-i2v-wan22-video-lora-k3nk)\n- [WAN 2.2 Anime Cumshot Aesthetics](https://civitai.com/models/1869475/wan-22-anime-cumshot-aesthetics-precision-load-i2v-beta-version)\n- [Wan 2.2 I2V Footjob](https://civitai.com/models/1861926/wan-22-i2v-footjob)\n- [Wan 2.2 I2V Shoejob](https://civitai.com/models/1954109/wan-22-i2v-shoejob)"
+                                         ],
+                      "color":  "#432",
+                      "bgcolor":  "#653"
+                  },
+                  {
+                      "id":  133,
+                      "type":  "MarkdownNote",
+                      "pos":  [
+                                  68.55414817316382,
+                                  -1073.1881006725653
+                              ],
+                      "size":  [
+                                   1043.050306938701,
+                                   494.7473830022133
+                               ],
+                      "flags":  {
+
+                                },
+                      "order":  13,
+                      "mode":  0,
+                      "inputs":  [
+
+                                 ],
+                      "outputs":  [
+
+                                  ],
+                      "title":  "Step 4 - WAN Process",
+                      "properties":  {
+
+                                     },
+                      "widgets_values":  [
+                                             "**STEPS ( ! IMPORTANT ! )**:\n\nI have not seen much improvement when increasing the steps from 4 to 6. Leave them at 4.\n\n**VIDEO SIZE \u0026 LENGTH**:\n\nThe output is much cleaner and crispier if the INPUT images have the same dimensions. Use an image with higher resolution and it will be scaled down automatically. Just make sure the ratio (e.g. 16:9) is the same or similar.\n\nDimensions must be divisible by 16! For quick generations (testing), use these dimensions:\n\n- 512 x 512 (SQUARE)\n- 432 x 768 (9:16)\n- 768 ﾃ・432 (16:9)\n- 640 ﾃ・480 (4:3)\n- 480 x 640 (3:4)\n\nFor final render, this is what my machine was capable of (8GB VRAM / 32GB RAM):\n- 864 x 864 (SQUARE)\n- 544 x 960 (9:16)\n- 960 x 544 (16:9)\n- 896 x 672 (4:3)\n- 672 x 896 (3:4)\n\n**LENGTH**:\n\n81 frames for 5 seconds. I do **not** recommend trying longer or shorter duration using this workflow. It increased the generation time by a lot and the quality degrades. But if you must, the frame length must be divisible by 16 + 1.\n\n**KSampler**:\n\nChange noise_seed generation from \"randomize\" to \"fixed\" if you are happy with the testing result but want a higher resolution. Otherwise, leave everything else as it is if you do not know what you are doing. \n\n**Motion Amplitude:**\n\nFixes no motion problem with WAN (e.g. camera rotation), this PainterI2V node is magic!\n\n* 1.0 (original) \u003e No difference from the original WAN node\n* 1.15 (default) \u003e General use\n* 1.3 \u003e Sports action\n* 1.5 \u003e Extreme motion"
+                                         ],
+                      "color":  "#432",
+                      "bgcolor":  "#653"
+                  },
+                  {
+                      "id":  157,
+                      "type":  "ImageUpscaleWithModel",
+                      "pos":  [
+                                  2141.4811088186884,
+                                  -648.6670492458037
+                              ],
+                      "size":  [
+                                   233.53333129882813,
+                                   46
+                               ],
+                      "flags":  {
+
+                                },
+                      "order":  32,
+                      "mode":  0,
+                      "inputs":  [
+                                     {
+                                         "name":  "upscale_model",
+                                         "type":  "UPSCALE_MODEL",
+                                         "link":  303
+                                     },
+                                     {
+                                         "name":  "image",
+                                         "type":  "IMAGE",
+                                         "link":  307
+                                     }
+                                 ],
+                      "outputs":  [
+                                      {
+                                          "name":  "IMAGE",
+                                          "type":  "IMAGE",
+                                          "links":  [
+                                                        311
+                                                    ]
+                                      }
+                                  ],
+                      "properties":  {
+                                         "Node name for S\u0026R":  "ImageUpscaleWithModel"
+                                     },
+                      "widgets_values":  [
+
+                                         ],
+                      "color":  "#432",
+                      "bgcolor":  "#653"
+                  },
+                  {
+                      "id":  138,
+                      "type":  "Note",
+                      "pos":  [
+                                  -796.2033464351874,
+                                  568.701624472909
+                              ],
+                      "size":  [
+                                   802.8573807081125,
+                                   148.71453901317238
+                               ],
+                      "flags":  {
+
+                                },
+                      "order":  14,
+                      "mode":  0,
+                      "inputs":  [
+
+                                 ],
+                      "outputs":  [
+
+                                  ],
+                      "title":  "PROMPT COLLECTION",
+                      "properties":  {
+
+                                     },
+                      "widgets_values":  [
+                                             "[NSFW LORA]\nVery high quality 4k drawn animation, nsfwsks, \n\n---\n\n[FOOTJOB LORA]\nfootjob.  the woman\u0027s feet move up and down.  her toes surround his penis.  the woman is performing a footjob.\n\nA woman is performing a footjob, her toes surround his penis and she moves her feet up and down along the shaft of the penis in a very fast in a long smooth motion. \n\n[CUMSHOT LORA]\nThe man ejaculates, shooting a large translucent cumshot that drips onto her toes.\n\n[DEEPTHROAT LORA]\na  woman in front of a penis, she engages in a deep throat blowjob, she swallows the penis all the way. Her lips touches the man\u0027s groin. Her nose smashes against the man\u0027s hips.\n\nRegular swallow\na woman on top of an erected penis, she widely opens her mouth and swallows the entire penis, sucks the cock deep throat, she opens her mouth and she moves her head over the erected penis, she sucks it from tip to base, she has her tongue sticking out, her mouth keeps open to accommodate the thickness of the penis in her mouth. the neck of the woman is bulging and bulging due to the dimensions of the large penis. The woman\u0027s nose gets smashed against the man hips violently. When her face smashes the man\u0027s groin the extended tongue of the woman wraps under the man\u0027s testicles. The man is thrusting his penis back and forth in rapid motions smashing the face of the woman with his energetic thrusts.\n\n[SHOEJOB LORA]\na woman is sitting in front of a man. she is wearing [shoes]. her feet move up and down. the woman is performing a shoejob.\n\nthe woman brings her feet together around the man\u0027s penis. she smashes the man\u0027s penis between her shoes.\n\n[DR34ML4Y LORA]\n\nm15510n4ry, A shot of missionary sex and a detailed view of a woman\u0027s vagina and a man\u0027s erect penis which is penetrating her. The woman\u0027s skin is light and the woman having sex has natural pubic hair above her vagina. The penis is erect as it thrusts in and out of her vagina. There is a slight sheen of moisture on both the penis and the surrounding skin. The background is a fancy bedroom where she is at the edge of the white bed laying on her back and he is between her spread legs. The lighting is even highlighting the natural skin tones and textures.\n\nbl0wj0b, A close-up view of a single {tiny|emasciated|young|18-year old|old|cheerleader|pale goth|petite|rail-thin|plump teen|fat|full-body} woman with performing a blowjob on a man\u0027s erect penis. The girl is nearly naked except for {choker|leggings|a slutty belt|crotchless panties|a microkini} barely covering her {white|black|olive|fair|tan-lined|thai} skin and {small|huge|a-cup|DDD} breasts and {glittery|pink|black|rainbow} hair. Her nails are manicured with a {glittery|pink|black|rainbow|natural} design as she grasps the base of the penis and uses it to guide it in and around her mouth as she sucks on the mans {penis and testicles|shaft and balls|erect penis|penis tip as it dribbles white-clear semen from the tip and onto her tongue and lips}\n\nd0ubl3_bj, A close-up view of two fat girls with performing a double blowjob on a man\u0027s erect penis. The girls are nude save for slutty choker collars, the girl on the left has pale skin blonde russian slutty pigtail hair. Her nails are manicured with a glittery design as she grasps the base of the penis. The other woman has light thai tan-lined skin and skin black hair with bows and her eyes are closed. Both women are focused on the man\u0027s penis which is circumcised and erect. They both lick and run their lips along the shaft of the man\u0027s penis. One womans hand moves slightly up and down the base stroking his penis as the suck and lick and share it. The lighting is cinematic yet voyeuristic.\n\nc0wg1rl, a {4k UHD footage|iphone video from 2000s|vintage 1970s|futuristic 8k} {pov|side-shot|top-down xxx pov|4k video} {tiny|emasciated|young|18-year old|cheerleader|pale goth|petite|rail-thin|plump teen|fat|full-body} girl with her arms behind her back and legs spread apart in the reverse cowgirl position. She has {white|black|olive|fair|tan-lined|thai} skin {small|huge|a-cup|DDD} breasts and {long straight|wet|pink|black|rainbow} hair. Her eyes are closed and she has a slight smile of {pain|mischeif|embarassment|lust|sleepiness|possesed|evil} on her face as she {opens|fixes|rolls|focuses} her eyes at the viewer. Her vagina is fully exposed and her legs are slightly bent at the knees. At the bottom of the frame a man\u0027s erect penis is thrusting into her vagina.\n\nd0gg1e, A footage|iphone video from 2000s|vintage 1970s|futuristic 8k} {pov|side-shot|top-down xxx pov|4k video} of a {tiny|emasciated|young|18-year old|cheerleader|pale goth|petite|rail-thin|plump teen|fat|full-body} woman {bent over her bed at the waist with her stomach and chest flat on the bed|on her hands and knees|bent over presenting her pussy and anus|bent at the waist reaching toward the ground with ass up|face down, ass up}. She has {white|black|olive|fair|tan-lined|thai} skin {small|huge|a-cup|DDD} breasts and {long straight|wet|pink|black|rainbow} hair and is having her {tiny pussy|butthole|anus|vagina|puffy little vagina|hairless pussy|hairy vagina|4K pussyhole} penetrated in and out repeatedly by one man\u0027s modest sized erect penis, slowly but totally in and out as she looks back toward the camera and POV man fucking her. The background is {other young ladies gather around to gain the experience of watching her suck the penis, watching in lab coats that are open exposing their naked bodies in the background|in a church confession booth}"
+                                         ],
+                      "color":  "#432",
+                      "bgcolor":  "#653"
+                  },
+                  {
+                      "id":  93,
+                      "type":  "CLIPTextEncode",
+                      "pos":  [
+                                  -810.0075619550366,
+                                  -55.06409826695047
+                              ],
+                      "size":  [
+                                   825.8773305553427,
+                                   164.56140549538407
+                               ],
+                      "flags":  {
+
+                                },
+                      "order":  17,
+                      "mode":  0,
+                      "inputs":  [
+                                     {
+                                         "name":  "clip",
+                                         "type":  "CLIP",
+                                         "link":  221
+                                     }
+                                 ],
+                      "outputs":  [
+                                      {
+                                          "name":  "CONDITIONING",
+                                          "type":  "CONDITIONING",
+                                          "slot_index":  0,
+                                          "links":  [
+                                                        344
+                                                    ]
+                                      }
+                                  ],
+                      "title":  "CLIP Text Encode (Positive Prompt)",
+                      "properties":  {
+                                         "Node name for S\u0026R":  "CLIPTextEncode",
+                                         "cnr_id":  "comfy-core",
+                                         "ver":  "0.3.45",
+                                         "ue_properties":  {
+                                                               "widget_ue_connectable":  {
+
+                                                                                         },
+                                                               "version":  "7.1",
+                                                               "input_ue_unconnectable":  {
+
+                                                                                          }
+                                                           }
+                                     },
+                      "widgets_values":  [
+                                             "Write your prompt here."
+                                         ],
+                      "color":  "#232",
+                      "bgcolor":  "#353"
+                  },
+                  {
+                      "id":  145,
+                      "type":  "Power Lora Loader (rgthree)",
+                      "pos":  [
+                                  -731.0563816232496,
+                                  -494.607545927311
+                              ],
+                      "size":  [
+                                   448.81676077337795,
+                                   318.4326794603599
+                               ],
+                      "flags":  {
+
+                                },
+                      "order":  21,
+                      "mode":  0,
+                      "inputs":  [
+                                     {
+                                         "dir":  3,
+                                         "name":  "model",
+                                         "type":  "MODEL",
+                                         "link":  288
+                                     },
+                                     {
+                                         "dir":  3,
+                                         "name":  "clip",
+                                         "type":  "CLIP",
+                                         "link":  null
+                                     }
+                                 ],
+                      "outputs":  [
+                                      {
+                                          "dir":  4,
+                                          "name":  "MODEL",
+                                          "shape":  3,
+                                          "type":  "MODEL",
+                                          "links":  [
+                                                        376
+                                                    ]
+                                      },
+                                      {
+                                          "dir":  4,
+                                          "name":  "CLIP",
+                                          "shape":  3,
+                                          "type":  "CLIP",
+                                          "links":  null
+                                      }
+                                  ],
+                      "title":  "LORAS - LOW NOISE",
+                      "properties":  {
+                                         "Show Strengths":  "Single Strength"
+                                     },
+                      "widgets_values":  [
+                                             {
+
+                                             },
+                                             {
+                                                 "type":  "PowerLoraLoaderHeaderWidget"
+                                             },
+                                             {
+                                                 "on":  true,
+                                                 "lora":  "WAN\\NSFW-22-L-e8.safetensors",
+                                                 "strength":  1,
+                                                 "strengthTwo":  null
+                                             },
+                                             {
+                                                 "on":  false,
+                                                 "lora":  "None",
+                                                 "strength":  1,
+                                                 "strengthTwo":  null
+                                             },
+                                             {
+                                                 "on":  false,
+                                                 "lora":  "None",
+                                                 "strength":  1,
+                                                 "strengthTwo":  null
+                                             },
+                                             {
+                                                 "on":  false,
+                                                 "lora":  "None",
+                                                 "strength":  1,
+                                                 "strengthTwo":  null
+                                             },
+                                             {
+                                                 "on":  false,
+                                                 "lora":  "None",
+                                                 "strength":  1,
+                                                 "strengthTwo":  null
+                                             },
+                                             {
+
+                                             },
+                                             ""
+                                         ]
+                  },
+                  {
+                      "id":  144,
+                      "type":  "Power Lora Loader (rgthree)",
+                      "pos":  [
+                                  -1179.2352997482442,
+                                  -482.17407686860736
+                              ],
+                      "size":  [
+                                   437.8477997350893,
+                                   300.7779051172471
+                               ],
+                      "flags":  {
+
+                                },
+                      "order":  20,
+                      "mode":  0,
+                      "inputs":  [
+                                     {
+                                         "dir":  3,
+                                         "name":  "model",
+                                         "type":  "MODEL",
+                                         "link":  285
+                                     },
+                                     {
+                                         "dir":  3,
+                                         "name":  "clip",
+                                         "type":  "CLIP",
+                                         "link":  null
+                                     }
+                                 ],
+                      "outputs":  [
+                                      {
+                                          "dir":  4,
+                                          "name":  "MODEL",
+                                          "shape":  3,
+                                          "type":  "MODEL",
+                                          "links":  [
+                                                        373
+                                                    ]
+                                      },
+                                      {
+                                          "dir":  4,
+                                          "name":  "CLIP",
+                                          "shape":  3,
+                                          "type":  "CLIP",
+                                          "links":  null
+                                      }
+                                  ],
+                      "title":  "LORAS - HIGH NOISE",
+                      "properties":  {
+                                         "Show Strengths":  "Single Strength"
+                                     },
+                      "widgets_values":  [
+                                             {
+
+                                             },
+                                             {
+                                                 "type":  "PowerLoraLoaderHeaderWidget"
+                                             },
+                                             {
+                                                 "on":  true,
+                                                 "lora":  "WAN\\NSFW-22-H-e8.safetensors",
+                                                 "strength":  1,
+                                                 "strengthTwo":  null
+                                             },
+                                             {
+                                                 "on":  false,
+                                                 "lora":  "None",
+                                                 "strength":  1,
+                                                 "strengthTwo":  null
+                                             },
+                                             {
+                                                 "on":  false,
+                                                 "lora":  "None",
+                                                 "strength":  1,
+                                                 "strengthTwo":  null
+                                             },
+                                             {
+                                                 "on":  false,
+                                                 "lora":  "None",
+                                                 "strength":  1,
+                                                 "strengthTwo":  null
+                                             },
+                                             {
+                                                 "on":  false,
+                                                 "lora":  "None",
+                                                 "strength":  1,
+                                                 "strengthTwo":  null
+                                             },
+                                             {
+
+                                             },
+                                             ""
+                                         ]
+                  },
+                  {
+                      "id":  199,
+                      "type":  "65f90357-7308-45ea-af88-40173c3e15e2",
+                      "pos":  [
+                                  -256.89076582617173,
+                                  -464.6904557075176
+                              ],
+                      "size":  [
+                                   272.6166595458984,
+                                   78
+                               ],
+                      "flags":  {
+                                    "collapsed":  false
+                                },
+                      "order":  25,
+                      "mode":  0,
+                      "inputs":  [
+                                     {
+                                         "name":  "model",
+                                         "type":  "MODEL",
+                                         "link":  373
+                                     },
+                                     {
+                                         "name":  "conditioning",
+                                         "type":  "CONDITIONING",
+                                         "link":  374
+                                     }
+                                 ],
+                      "outputs":  [
+                                      {
+                                          "name":  "MODEL",
+                                          "type":  "MODEL",
+                                          "links":  [
+                                                        375
+                                                    ]
+                                      }
+                                  ],
+                      "properties":  {
+                                         "proxyWidgets":  [
+                                                              [
+                                                                  "-1",
+                                                                  "value"
+                                                              ]
+                                                          ]
+                                     },
+                      "widgets_values":  [
+                                             5
+                                         ]
+                  },
+                  {
+                      "id":  200,
+                      "type":  "38063cbe-6bff-4f47-bffb-4bcfa01a04c4",
+                      "pos":  [
+                                  -254.1026772581723,
+                                  -286.6848678126499
+                              ],
+                      "size":  [
+                                   269.6166595458984,
+                                   78
+                               ],
+                      "flags":  {
+
+                                },
+                      "order":  26,
+                      "mode":  0,
+                      "inputs":  [
+                                     {
+                                         "name":  "model",
+                                         "type":  "MODEL",
+                                         "link":  376
+                                     },
+                                     {
+                                         "name":  "conditioning",
+                                         "type":  "CONDITIONING",
+                                         "link":  377
+                                     }
+                                 ],
+                      "outputs":  [
+                                      {
+                                          "name":  "MODEL",
+                                          "type":  "MODEL",
+                                          "links":  [
+                                                        378
+                                                    ]
+                                      }
+                                  ],
+                      "properties":  {
+                                         "proxyWidgets":  [
+                                                              [
+                                                                  "-1",
+                                                                  "value"
+                                                              ]
+                                                          ]
+                                     },
+                      "widgets_values":  [
+                                             5
+                                         ]
+                  },
+                  {
+                      "id":  155,
+                      "type":  "Seed (rgthree)",
+                      "pos":  [
+                                  101.94485270765301,
+                                  33.44462129230726
+                              ],
+                      "size":  [
+                                   315,
+                                   130
+                               ],
+                      "flags":  {
+
+                                },
+                      "order":  15,
+                      "mode":  0,
+                      "inputs":  [
+
+                                 ],
+                      "outputs":  [
+                                      {
+                                          "dir":  4,
+                                          "name":  "SEED",
+                                          "shape":  3,
+                                          "type":  "INT",
+                                          "links":  [
+                                                        301
+                                                    ]
+                                      }
+                                  ],
+                      "properties":  {
+                                         "randomMax":  1125899906842624,
+                                         "randomMin":  0
+                                     },
+                      "widgets_values":  [
+                                             -1,
+                                             "",
+                                             "",
+                                             ""
+                                         ]
+                  },
+                  {
+                      "id":  193,
+                      "type":  "LoadAndResizeImage",
+                      "pos":  [
+                                  -1173.5155196258781,
+                                  -61.14526414398257
+                              ],
+                      "size":  [
+                                   316.1471795540797,
+                                   578
+                               ],
+                      "flags":  {
+
+                                },
+                      "order":  19,
+                      "mode":  0,
+                      "inputs":  [
+                                     {
+                                         "name":  "width",
+                                         "type":  "INT",
+                                         "widget":  {
+                                                        "name":  "width"
+                                                    },
+                                         "link":  359
+                                     },
+                                     {
+                                         "name":  "height",
+                                         "type":  "INT",
+                                         "widget":  {
+                                                        "name":  "height"
+                                                    },
+                                         "link":  360
+                                     }
+                                 ],
+                      "outputs":  [
+                                      {
+                                          "name":  "image",
+                                          "type":  "IMAGE",
+                                          "links":  [
+                                                        362
+                                                    ]
+                                      },
+                                      {
+                                          "name":  "mask",
+                                          "type":  "MASK",
+                                          "links":  null
+                                      },
+                                      {
+                                          "name":  "width",
+                                          "type":  "INT",
+                                          "links":  null
+                                      },
+                                      {
+                                          "name":  "height",
+                                          "type":  "INT",
+                                          "links":  null
+                                      },
+                                      {
+                                          "name":  "image_path",
+                                          "type":  "STRING",
+                                          "links":  null
+                                      }
+                                  ],
+                      "title":  "START IMAGE",
+                      "properties":  {
+                                         "Node name for S\u0026R":  "LoadAndResizeImage"
+                                     },
+                      "widgets_values":  [
+                                             "INTRO_001.png",
+                                             true,
+                                             512,
+                                             512,
+                                             1,
+                                             false,
+                                             16,
+                                             "alpha",
+                                             "",
+                                             "image"
+                                         ]
+                  },
+                  {
+                      "id":  130,
+                      "type":  "MarkdownNote",
+                      "pos":  [
+                                  -2028.0709250593866,
+                                  -525.1634069953993
+                              ],
+                      "size":  [
+                                   376.77924152062974,
+                                   288.5522789768517
+                               ],
+                      "flags":  {
+
+                                },
+                      "order":  16,
+                      "mode":  0,
+                      "inputs":  [
+
+                                 ],
+                      "outputs":  [
+
+                                  ],
+                      "title":  "Step 1 - Models",
+                      "properties":  {
+
+                                     },
+                      "widgets_values":  [
+                                             "## TastySin GGUF Q8 Workflow for the GPU poor\n\nThis workflow specifically designed for TastySin v8 GGUF for PCs with at least **8GB RAM, 32GB DRAM with sage-attention**, and **pytorch2.7.0 nightly** installed. [Check my earlier workflow if you want to use other models or do not meet the requirements.](https://civitai.com/models/2272369/wan22-i2v-gguf-nsfw-8gb-vram-32gb-ram-workflow)\n\nUnfortunately, I cannot provide tech support on how to install sage-attention and this pytorch version. Please spend some of your time and do it. It is worth it!\n\nPut **TastySin GGUF Q8** models under **unet** folder.\n\n- [TastySin GGUF](https://civitai.com/models/2190659?modelVersionId=2466604)\n\n**Text encoder GGUF**:\n\n- [UMT5 XXL ENCODER GGUF](https://huggingface.co/city96/umt5-xxl-encoder-gguf)\n\n**VAE**:\n\n- [WAN 2.1 VAE BF16](https://huggingface.co/Kijai/WanVideo_comfy/resolve/main/Wan2_1_VAE_bf16.safetensors?download=true)"
+                                         ],
+                      "color":  "#432",
+                      "bgcolor":  "#653"
+                  }
+              ],
+    "links":  [
+                  [
+                      170,
+                      86,
+                      0,
+                      85,
+                      3,
+                      "LATENT"
+                  ],
+                  [
+                      176,
+                      90,
+                      0,
+                      87,
+                      1,
+                      "VAE"
+                  ],
+                  [
+                      221,
+                      120,
+                      0,
+                      93,
+                      0,
+                      "CLIP"
+                  ],
+                  [
+                      222,
+                      120,
+                      0,
+                      89,
+                      0,
+                      "CLIP"
+                  ],
+                  [
+                      223,
+                      87,
+                      0,
+                      121,
+                      0,
+                      "IMAGE"
+                  ],
+                  [
+                      285,
+                      116,
+                      0,
+                      144,
+                      0,
+                      "MODEL"
+                  ],
+                  [
+                      288,
+                      117,
+                      0,
+                      145,
+                      0,
+                      "MODEL"
+                  ],
+                  [
+                      290,
+                      85,
+                      0,
+                      146,
+                      0,
+                      "*"
+                  ],
+                  [
+                      291,
+                      146,
+                      0,
+                      87,
+                      0,
+                      "LATENT"
+                  ],
+                  [
+                      293,
+                      149,
+                      0,
+                      150,
+                      0,
+                      "IMAGE"
+                  ],
+                  [
+                      301,
+                      155,
+                      0,
+                      86,
+                      4,
+                      "INT"
+                  ],
+                  [
+                      303,
+                      159,
+                      0,
+                      157,
+                      0,
+                      "UPSCALE_MODEL"
+                  ],
+                  [
+                      307,
+                      87,
+                      0,
+                      157,
+                      1,
+                      "IMAGE"
+                  ],
+                  [
+                      311,
+                      157,
+                      0,
+                      149,
+                      0,
+                      "IMAGE"
+                  ],
+                  [
+                      334,
+                      184,
+                      0,
+                      185,
+                      0,
+                      "*"
+                  ],
+                  [
+                      335,
+                      183,
+                      0,
+                      186,
+                      0,
+                      "*"
+                  ],
+                  [
+                      344,
+                      93,
+                      0,
+                      190,
+                      0,
+                      "CONDITIONING"
+                  ],
+                  [
+                      345,
+                      89,
+                      0,
+                      190,
+                      1,
+                      "CONDITIONING"
+                  ],
+                  [
+                      346,
+                      90,
+                      0,
+                      190,
+                      2,
+                      "VAE"
+                  ],
+                  [
+                      351,
+                      190,
+                      0,
+                      86,
+                      1,
+                      "CONDITIONING"
+                  ],
+                  [
+                      352,
+                      190,
+                      1,
+                      86,
+                      2,
+                      "CONDITIONING"
+                  ],
+                  [
+                      353,
+                      190,
+                      2,
+                      86,
+                      3,
+                      "LATENT"
+                  ],
+                  [
+                      354,
+                      190,
+                      0,
+                      85,
+                      1,
+                      "CONDITIONING"
+                  ],
+                  [
+                      355,
+                      190,
+                      1,
+                      85,
+                      2,
+                      "CONDITIONING"
+                  ],
+                  [
+                      357,
+                      183,
+                      0,
+                      190,
+                      6,
+                      "INT"
+                  ],
+                  [
+                      359,
+                      188,
+                      0,
+                      193,
+                      0,
+                      "INT"
+                  ],
+                  [
+                      360,
+                      187,
+                      0,
+                      193,
+                      1,
+                      "INT"
+                  ],
+                  [
+                      362,
+                      193,
+                      0,
+                      190,
+                      4,
+                      "IMAGE"
+                  ],
+                  [
+                      363,
+                      184,
+                      0,
+                      190,
+                      5,
+                      "INT"
+                  ],
+                  [
+                      373,
+                      144,
+                      0,
+                      199,
+                      0,
+                      "MODEL"
+                  ],
+                  [
+                      374,
+                      89,
+                      0,
+                      199,
+                      1,
+                      "CONDITIONING"
+                  ],
+                  [
+                      375,
+                      199,
+                      0,
+                      86,
+                      0,
+                      "MODEL"
+                  ],
+                  [
+                      376,
+                      145,
+                      0,
+                      200,
+                      0,
+                      "MODEL"
+                  ],
+                  [
+                      377,
+                      89,
+                      0,
+                      200,
+                      1,
+                      "CONDITIONING"
+                  ],
+                  [
+                      378,
+                      200,
+                      0,
+                      85,
+                      0,
+                      "MODEL"
+                  ]
+              ],
+    "groups":  [
+                   {
+                       "id":  1,
+                       "title":  "Step 1 - Models",
+                       "bounding":  [
+                                        -1642.1639318281866,
+                                        -558.5629377683629,
+                                        412.7076463849228,
+                                        708.4106221660265
+                                    ],
+                       "color":  "#3f789e",
+                       "font_size":  24,
+                       "flags":  {
+
+                                 }
+                   },
+                   {
+                       "id":  2,
+                       "title":  "Step 2 - Loras",
+                       "bounding":  [
+                                        -1195.1461932805576,
+                                        -555.1418836468242,
+                                        1222.1934537798575,
+                                        393.5966278076511
+                                    ],
+                       "color":  "#3f789e",
+                       "font_size":  24,
+                       "flags":  {
+
+                                 }
+                   },
+                   {
+                       "id":  3,
+                       "title":  "Step 3 - Image \u0026 Prompt",
+                       "bounding":  [
+                                        -1194.0058419067082,
+                                        -136.63292944534234,
+                                        1217.066503161842,
+                                        866.3230007202324
+                                    ],
+                       "color":  "#3f789e",
+                       "font_size":  24,
+                       "flags":  {
+
+                                 }
+                   },
+                   {
+                       "id":  4,
+                       "title":  "Step 4 - WAN Process",
+                       "bounding":  [
+                                        62.31926665943295,
+                                        -555.9059190673017,
+                                        1051.7793444723125,
+                                        761.7704723675733
+                                    ],
+                       "color":  "#3f789e",
+                       "font_size":  24,
+                       "flags":  {
+
+                                 }
+                   },
+                   {
+                       "id":  5,
+                       "title":  "Step 5 - Result",
+                       "bounding":  [
+                                        1142.01535093057,
+                                        -553.3857425311019,
+                                        612.4050968121394,
+                                        754.9869103975457
+                                    ],
+                       "color":  "#3f789e",
+                       "font_size":  24,
+                       "flags":  {
+
+                                 }
+                   },
+                   {
+                       "id":  6,
+                       "title":  "Step 6 - Frame Interpolation",
+                       "bounding":  [
+                                        1799.6017615727812,
+                                        -552.4342418933434,
+                                        610.5246933013025,
+                                        753.822851081314
+                                    ],
+                       "color":  "#3f789e",
+                       "font_size":  24,
+                       "flags":  {
+
+                                 }
+                   },
+                   {
+                       "id":  7,
+                       "title":  "Step 5.1 - Upscale",
+                       "bounding":  [
+                                        1799.8261944107762,
+                                        -744.8126883393275,
+                                        614.5010634201763,
+                                        183.722282773791
+                                    ],
+                       "color":  "#b58b2a",
+                       "font_size":  24,
+                       "flags":  {
+
+                                 }
+                   }
+               ],
+    "definitions":  {
+                        "subgraphs":  [
+                                          {
+                                              "id":  "65f90357-7308-45ea-af88-40173c3e15e2",
+                                              "version":  1,
+                                              "state":  {
+                                                            "lastGroupId":  7,
+                                                            "lastNodeId":  204,
+                                                            "lastLinkId":  376,
+                                                            "lastRerouteId":  1
+                                                        },
+                                              "revision":  0,
+                                              "config":  {
+
+                                                         },
+                                              "name":  "SAGE+TORCH+NAG+SHIFT - HIGH",
+                                              "inputNode":  {
+                                                                "id":  -10,
+                                                                "bounding":  [
+                                                                                 -986.6897001291967,
+                                                                                 -533.272310635605,
+                                                                                 120,
+                                                                                 100
+                                                                             ]
+                                                            },
+                                              "outputNode":  {
+                                                                 "id":  -20,
+                                                                 "bounding":  [
+                                                                                  498.13953251195625,
+                                                                                  -533.6693560118349,
+                                                                                  120,
+                                                                                  60
+                                                                              ]
+                                                             },
+                                              "inputs":  [
+                                                             {
+                                                                 "id":  "a4df92ae-04c5-429c-9954-5b9f2a13e423",
+                                                                 "name":  "model",
+                                                                 "type":  "MODEL",
+                                                                 "linkIds":  [
+                                                                                 366
+                                                                             ],
+                                                                 "localized_name":  "model",
+                                                                 "pos":  [
+                                                                             -886.6897001291967,
+                                                                             -513.272310635605
+                                                                         ]
+                                                             },
+                                                             {
+                                                                 "id":  "3f2a8417-01ce-4435-bba6-1cf7637ea35d",
+                                                                 "name":  "conditioning",
+                                                                 "type":  "CONDITIONING",
+                                                                 "linkIds":  [
+                                                                                 231
+                                                                             ],
+                                                                 "localized_name":  "conditioning",
+                                                                 "pos":  [
+                                                                             -886.6897001291967,
+                                                                             -493.272310635605
+                                                                         ]
+                                                             },
+                                                             {
+                                                                 "id":  "a22486d3-4aff-448a-894a-c8066fc23674",
+                                                                 "name":  "value",
+                                                                 "type":  "FLOAT",
+                                                                 "linkIds":  [
+                                                                                 375
+                                                                             ],
+                                                                 "pos":  [
+                                                                             -886.6897001291967,
+                                                                             -473.272310635605
+                                                                         ]
+                                                             }
+                                                         ],
+                                              "outputs":  [
+                                                              {
+                                                                  "id":  "b3716bf4-96dc-45ff-8d35-d83d75783ab8",
+                                                                  "name":  "MODEL",
+                                                                  "type":  "MODEL",
+                                                                  "linkIds":  [
+                                                                                  195
+                                                                              ],
+                                                                  "localized_name":  "MODEL",
+                                                                  "pos":  [
+                                                                              518.1395325119563,
+                                                                              -513.6693560118349
+                                                                          ]
+                                                              }
+                                                          ],
+                                              "widgets":  [
+
+                                                          ],
+                                              "nodes":  [
+                                                            {
+                                                                "id":  197,
+                                                                "type":  "ModelPatchTorchSettings",
+                                                                "pos":  [
+                                                                            -425.05697573109586,
+                                                                            -524.5602602886763
+                                                                        ],
+                                                                "size":  [
+                                                                             312.1090850830078,
+                                                                             58
+                                                                         ],
+                                                                "flags":  {
+                                                                              "collapsed":  false
+                                                                          },
+                                                                "order":  3,
+                                                                "mode":  0,
+                                                                "inputs":  [
+                                                                               {
+                                                                                   "localized_name":  "model",
+                                                                                   "name":  "model",
+                                                                                   "type":  "MODEL",
+                                                                                   "link":  369
+                                                                               }
+                                                                           ],
+                                                                "outputs":  [
+                                                                                {
+                                                                                    "localized_name":  "MODEL",
+                                                                                    "name":  "MODEL",
+                                                                                    "type":  "MODEL",
+                                                                                    "links":  [
+                                                                                                  370
+                                                                                              ]
+                                                                                }
+                                                                            ],
+                                                                "properties":  {
+                                                                                   "Node name for S\u0026R":  "ModelPatchTorchSettings",
+                                                                                   "cnr_id":  "comfyui-kjnodes",
+                                                                                   "ver":  "1.2.6"
+                                                                               },
+                                                                "widgets_values":  [
+                                                                                       true
+                                                                                   ]
+                                                            },
+                                                            {
+                                                                "id":  124,
+                                                                "type":  "WanVideoNAG",
+                                                                "pos":  [
+                                                                            -69.62023754037035,
+                                                                            -522.7197339392394
+                                                                        ],
+                                                                "size":  [
+                                                                             270,
+                                                                             150
+                                                                         ],
+                                                                "flags":  {
+                                                                              "collapsed":  false
+                                                                          },
+                                                                "order":  1,
+                                                                "mode":  0,
+                                                                "inputs":  [
+                                                                               {
+                                                                                   "localized_name":  "model",
+                                                                                   "name":  "model",
+                                                                                   "type":  "MODEL",
+                                                                                   "link":  370
+                                                                               },
+                                                                               {
+                                                                                   "localized_name":  "conditioning",
+                                                                                   "name":  "conditioning",
+                                                                                   "type":  "CONDITIONING",
+                                                                                   "link":  231
+                                                                               }
+                                                                           ],
+                                                                "outputs":  [
+                                                                                {
+                                                                                    "localized_name":  "model",
+                                                                                    "name":  "model",
+                                                                                    "type":  "MODEL",
+                                                                                    "links":  [
+                                                                                                  230
+                                                                                              ]
+                                                                                }
+                                                                            ],
+                                                                "title":  "WanVideoNAG-High",
+                                                                "properties":  {
+                                                                                   "Node name for S\u0026R":  "WanVideoNAG"
+                                                                               },
+                                                                "widgets_values":  [
+                                                                                       11,
+                                                                                       0.25,
+                                                                                       2.5,
+                                                                                       "default"
+                                                                                   ]
+                                                            },
+                                                            {
+                                                                "id":  104,
+                                                                "type":  "ModelSamplingSD3",
+                                                                "pos":  [
+                                                                            234.19245108773214,
+                                                                            -525.3865239153472
+                                                                        ],
+                                                                "size":  [
+                                                                             210,
+                                                                             60
+                                                                         ],
+                                                                "flags":  {
+                                                                              "collapsed":  false
+                                                                          },
+                                                                "order":  0,
+                                                                "mode":  0,
+                                                                "inputs":  [
+                                                                               {
+                                                                                   "localized_name":  "model",
+                                                                                   "name":  "model",
+                                                                                   "type":  "MODEL",
+                                                                                   "link":  230
+                                                                               },
+                                                                               {
+                                                                                   "localized_name":  "shift",
+                                                                                   "name":  "shift",
+                                                                                   "type":  "FLOAT",
+                                                                                   "widget":  {
+                                                                                                  "name":  "shift"
+                                                                                              },
+                                                                                   "link":  376
+                                                                               }
+                                                                           ],
+                                                                "outputs":  [
+                                                                                {
+                                                                                    "localized_name":  "MODEL",
+                                                                                    "name":  "MODEL",
+                                                                                    "type":  "MODEL",
+                                                                                    "slot_index":  0,
+                                                                                    "links":  [
+                                                                                                  195
+                                                                                              ]
+                                                                                }
+                                                                            ],
+                                                                "properties":  {
+                                                                                   "Node name for S\u0026R":  "ModelSamplingSD3",
+                                                                                   "cnr_id":  "comfy-core",
+                                                                                   "ver":  "0.3.45",
+                                                                                   "ue_properties":  {
+                                                                                                         "widget_ue_connectable":  {
+
+                                                                                                                                   },
+                                                                                                         "version":  "7.1",
+                                                                                                         "input_ue_unconnectable":  {
+
+                                                                                                                                    }
+                                                                                                     }
+                                                                               },
+                                                                "widgets_values":  [
+                                                                                       8
+                                                                                   ]
+                                                            },
+                                                            {
+                                                                "id":  204,
+                                                                "type":  "PrimitiveFloat",
+                                                                "pos":  [
+                                                                            -723.3650143066765,
+                                                                            -398.9492136196015
+                                                                        ],
+                                                                "size":  [
+                                                                             270,
+                                                                             58
+                                                                         ],
+                                                                "flags":  {
+
+                                                                          },
+                                                                "order":  4,
+                                                                "mode":  0,
+                                                                "inputs":  [
+                                                                               {
+                                                                                   "localized_name":  "value",
+                                                                                   "name":  "value",
+                                                                                   "type":  "FLOAT",
+                                                                                   "widget":  {
+                                                                                                  "name":  "value"
+                                                                                              },
+                                                                                   "link":  375
+                                                                               }
+                                                                           ],
+                                                                "outputs":  [
+                                                                                {
+                                                                                    "localized_name":  "FLOAT",
+                                                                                    "name":  "FLOAT",
+                                                                                    "type":  "FLOAT",
+                                                                                    "links":  [
+                                                                                                  376
+                                                                                              ]
+                                                                                }
+                                                                            ],
+                                                                "title":  "SHIFT",
+                                                                "properties":  {
+                                                                                   "Node name for S\u0026R":  "PrimitiveFloat"
+                                                                               },
+                                                                "widgets_values":  [
+                                                                                       5
+                                                                                   ]
+                                                            },
+                                                            {
+                                                                "id":  195,
+                                                                "type":  "PathchSageAttentionKJ",
+                                                                "pos":  [
+                                                                            -721.1648280461453,
+                                                                            -525.3430966464182
+                                                                        ],
+                                                                "size":  [
+                                                                             270,
+                                                                             82
+                                                                         ],
+                                                                "flags":  {
+                                                                              "collapsed":  false
+                                                                          },
+                                                                "order":  2,
+                                                                "mode":  0,
+                                                                "inputs":  [
+                                                                               {
+                                                                                   "localized_name":  "model",
+                                                                                   "name":  "model",
+                                                                                   "type":  "MODEL",
+                                                                                   "link":  366
+                                                                               }
+                                                                           ],
+                                                                "outputs":  [
+                                                                                {
+                                                                                    "localized_name":  "MODEL",
+                                                                                    "name":  "MODEL",
+                                                                                    "type":  "MODEL",
+                                                                                    "links":  [
+                                                                                                  369
+                                                                                              ]
+                                                                                }
+                                                                            ],
+                                                                "properties":  {
+                                                                                   "Node name for S\u0026R":  "PathchSageAttentionKJ",
+                                                                                   "cnr_id":  "comfyui-kjnodes",
+                                                                                   "ver":  "1.2.6"
+                                                                               },
+                                                                "widgets_values":  [
+                                                                                       "auto",
+                                                                                       true
+                                                                                   ]
+                                                            }
+                                                        ],
+                                              "groups":  [
+
+                                                         ],
+                                              "links":  [
+                                                            {
+                                                                "id":  369,
+                                                                "origin_id":  195,
+                                                                "origin_slot":  0,
+                                                                "target_id":  197,
+                                                                "target_slot":  0,
+                                                                "type":  "MODEL"
+                                                            },
+                                                            {
+                                                                "id":  370,
+                                                                "origin_id":  197,
+                                                                "origin_slot":  0,
+                                                                "target_id":  124,
+                                                                "target_slot":  0,
+                                                                "type":  "MODEL"
+                                                            },
+                                                            {
+                                                                "id":  230,
+                                                                "origin_id":  124,
+                                                                "origin_slot":  0,
+                                                                "target_id":  104,
+                                                                "target_slot":  0,
+                                                                "type":  "MODEL"
+                                                            },
+                                                            {
+                                                                "id":  366,
+                                                                "origin_id":  -10,
+                                                                "origin_slot":  0,
+                                                                "target_id":  195,
+                                                                "target_slot":  0,
+                                                                "type":  "MODEL"
+                                                            },
+                                                            {
+                                                                "id":  231,
+                                                                "origin_id":  -10,
+                                                                "origin_slot":  1,
+                                                                "target_id":  124,
+                                                                "target_slot":  1,
+                                                                "type":  "CONDITIONING"
+                                                            },
+                                                            {
+                                                                "id":  195,
+                                                                "origin_id":  104,
+                                                                "origin_slot":  0,
+                                                                "target_id":  -20,
+                                                                "target_slot":  0,
+                                                                "type":  "MODEL"
+                                                            },
+                                                            {
+                                                                "id":  375,
+                                                                "origin_id":  -10,
+                                                                "origin_slot":  2,
+                                                                "target_id":  204,
+                                                                "target_slot":  0,
+                                                                "type":  "FLOAT"
+                                                            },
+                                                            {
+                                                                "id":  376,
+                                                                "origin_id":  204,
+                                                                "origin_slot":  0,
+                                                                "target_id":  104,
+                                                                "target_slot":  1,
+                                                                "type":  "FLOAT"
+                                                            }
+                                                        ],
+                                              "extra":  {
+                                                            "workflowRendererVersion":  "LG"
+                                                        }
+                                          },
+                                          {
+                                              "id":  "38063cbe-6bff-4f47-bffb-4bcfa01a04c4",
+                                              "version":  1,
+                                              "state":  {
+                                                            "lastGroupId":  7,
+                                                            "lastNodeId":  200,
+                                                            "lastLinkId":  377,
+                                                            "lastRerouteId":  1
+                                                        },
+                                              "revision":  0,
+                                              "config":  {
+
+                                                         },
+                                              "name":  "SAGE+TORCH+NAG+SHIFT - LOW",
+                                              "inputNode":  {
+                                                                "id":  -10,
+                                                                "bounding":  [
+                                                                                 -945.5146482802562,
+                                                                                 -275.5653134449428,
+                                                                                 120,
+                                                                                 100
+                                                                             ]
+                                                            },
+                                              "outputNode":  {
+                                                                 "id":  -20,
+                                                                 "bounding":  [
+                                                                                  434.70269405797177,
+                                                                                  -276.31047636400524,
+                                                                                  120,
+                                                                                  60
+                                                                              ]
+                                                             },
+                                              "inputs":  [
+                                                             {
+                                                                 "id":  "7a6233bb-37e5-420a-b9a2-828d8e1b2f81",
+                                                                 "name":  "model",
+                                                                 "type":  "MODEL",
+                                                                 "linkIds":  [
+                                                                                 367
+                                                                             ],
+                                                                 "localized_name":  "model",
+                                                                 "pos":  [
+                                                                             -845.5146482802562,
+                                                                             -255.56531344494277
+                                                                         ]
+                                                             },
+                                                             {
+                                                                 "id":  "ae3b8335-1b48-43fd-82cc-e35ac1fb59df",
+                                                                 "name":  "conditioning",
+                                                                 "type":  "CONDITIONING",
+                                                                 "linkIds":  [
+                                                                                 232
+                                                                             ],
+                                                                 "localized_name":  "conditioning",
+                                                                 "pos":  [
+                                                                             -845.5146482802562,
+                                                                             -235.56531344494277
+                                                                         ]
+                                                             },
+                                                             {
+                                                                 "id":  "445bfad3-d519-4de4-972c-1fe31cc1fad4",
+                                                                 "name":  "value",
+                                                                 "type":  "FLOAT",
+                                                                 "linkIds":  [
+                                                                                 376
+                                                                             ],
+                                                                 "pos":  [
+                                                                             -845.5146482802562,
+                                                                             -215.56531344494277
+                                                                         ]
+                                                             }
+                                                         ],
+                                              "outputs":  [
+                                                              {
+                                                                  "id":  "3674545a-63a2-408f-bbf8-0f55c57a8d33",
+                                                                  "name":  "MODEL",
+                                                                  "type":  "MODEL",
+                                                                  "linkIds":  [
+                                                                                  192
+                                                                              ],
+                                                                  "localized_name":  "MODEL",
+                                                                  "pos":  [
+                                                                              454.70269405797177,
+                                                                              -256.31047636400524
+                                                                          ]
+                                                              }
+                                                          ],
+                                              "widgets":  [
+
+                                                          ],
+                                              "nodes":  [
+                                                            {
+                                                                "id":  198,
+                                                                "type":  "ModelPatchTorchSettings",
+                                                                "pos":  [
+                                                                            -435.10088851907614,
+                                                                            -273.6771151680492
+                                                                        ],
+                                                                "size":  [
+                                                                             312.1090850830078,
+                                                                             58
+                                                                         ],
+                                                                "flags":  {
+                                                                              "collapsed":  false
+                                                                          },
+                                                                "order":  3,
+                                                                "mode":  0,
+                                                                "inputs":  [
+                                                                               {
+                                                                                   "localized_name":  "model",
+                                                                                   "name":  "model",
+                                                                                   "type":  "MODEL",
+                                                                                   "link":  371
+                                                                               }
+                                                                           ],
+                                                                "outputs":  [
+                                                                                {
+                                                                                    "localized_name":  "MODEL",
+                                                                                    "name":  "MODEL",
+                                                                                    "type":  "MODEL",
+                                                                                    "links":  [
+                                                                                                  372
+                                                                                              ]
+                                                                                }
+                                                                            ],
+                                                                "properties":  {
+                                                                                   "Node name for S\u0026R":  "ModelPatchTorchSettings",
+                                                                                   "cnr_id":  "comfyui-kjnodes",
+                                                                                   "ver":  "1.2.6"
+                                                                               },
+                                                                "widgets_values":  [
+                                                                                       true
+                                                                                   ]
+                                                            },
+                                                            {
+                                                                "id":  127,
+                                                                "type":  "WanVideoNAG",
+                                                                "pos":  [
+                                                                            -95.85481637459404,
+                                                                            -273.42567001017994
+                                                                        ],
+                                                                "size":  [
+                                                                             270,
+                                                                             150
+                                                                         ],
+                                                                "flags":  {
+                                                                              "collapsed":  false
+                                                                          },
+                                                                "order":  1,
+                                                                "mode":  0,
+                                                                "inputs":  [
+                                                                               {
+                                                                                   "localized_name":  "model",
+                                                                                   "name":  "model",
+                                                                                   "type":  "MODEL",
+                                                                                   "link":  372
+                                                                               },
+                                                                               {
+                                                                                   "localized_name":  "conditioning",
+                                                                                   "name":  "conditioning",
+                                                                                   "type":  "CONDITIONING",
+                                                                                   "link":  232
+                                                                               }
+                                                                           ],
+                                                                "outputs":  [
+                                                                                {
+                                                                                    "localized_name":  "model",
+                                                                                    "name":  "model",
+                                                                                    "type":  "MODEL",
+                                                                                    "links":  [
+                                                                                                  234
+                                                                                              ]
+                                                                                }
+                                                                            ],
+                                                                "title":  "WanVideoNAG-Low",
+                                                                "properties":  {
+                                                                                   "Node name for S\u0026R":  "WanVideoNAG"
+                                                                               },
+                                                                "widgets_values":  [
+                                                                                       11,
+                                                                                       0.25,
+                                                                                       2.5,
+                                                                                       "default"
+                                                                                   ]
+                                                            },
+                                                            {
+                                                                "id":  103,
+                                                                "type":  "ModelSamplingSD3",
+                                                                "pos":  [
+                                                                            190.6616279488312,
+                                                                            -263.3136646712088
+                                                                        ],
+                                                                "size":  [
+                                                                             210,
+                                                                             58
+                                                                         ],
+                                                                "flags":  {
+                                                                              "collapsed":  false
+                                                                          },
+                                                                "order":  0,
+                                                                "mode":  0,
+                                                                "inputs":  [
+                                                                               {
+                                                                                   "localized_name":  "model",
+                                                                                   "name":  "model",
+                                                                                   "type":  "MODEL",
+                                                                                   "link":  234
+                                                                               },
+                                                                               {
+                                                                                   "localized_name":  "shift",
+                                                                                   "name":  "shift",
+                                                                                   "type":  "FLOAT",
+                                                                                   "widget":  {
+                                                                                                  "name":  "shift"
+                                                                                              },
+                                                                                   "link":  377
+                                                                               }
+                                                                           ],
+                                                                "outputs":  [
+                                                                                {
+                                                                                    "localized_name":  "MODEL",
+                                                                                    "name":  "MODEL",
+                                                                                    "type":  "MODEL",
+                                                                                    "slot_index":  0,
+                                                                                    "links":  [
+                                                                                                  192
+                                                                                              ]
+                                                                                }
+                                                                            ],
+                                                                "properties":  {
+                                                                                   "Node name for S\u0026R":  "ModelSamplingSD3",
+                                                                                   "cnr_id":  "comfy-core",
+                                                                                   "ver":  "0.3.45",
+                                                                                   "ue_properties":  {
+                                                                                                         "widget_ue_connectable":  {
+
+                                                                                                                                   },
+                                                                                                         "version":  "7.1",
+                                                                                                         "input_ue_unconnectable":  {
+
+                                                                                                                                    }
+                                                                                                     }
+                                                                               },
+                                                                "widgets_values":  [
+                                                                                       8
+                                                                                   ]
+                                                            },
+                                                            {
+                                                                "id":  200,
+                                                                "type":  "PrimitiveFloat",
+                                                                "pos":  [
+                                                                            -714.7989673746089,
+                                                                            -154.5632211415923
+                                                                        ],
+                                                                "size":  [
+                                                                             270,
+                                                                             58
+                                                                         ],
+                                                                "flags":  {
+
+                                                                          },
+                                                                "order":  4,
+                                                                "mode":  0,
+                                                                "inputs":  [
+                                                                               {
+                                                                                   "localized_name":  "value",
+                                                                                   "name":  "value",
+                                                                                   "type":  "FLOAT",
+                                                                                   "widget":  {
+                                                                                                  "name":  "value"
+                                                                                              },
+                                                                                   "link":  376
+                                                                               }
+                                                                           ],
+                                                                "outputs":  [
+                                                                                {
+                                                                                    "localized_name":  "FLOAT",
+                                                                                    "name":  "FLOAT",
+                                                                                    "type":  "FLOAT",
+                                                                                    "links":  [
+                                                                                                  377
+                                                                                              ]
+                                                                                }
+                                                                            ],
+                                                                "title":  "SHIFT",
+                                                                "properties":  {
+                                                                                   "Node name for S\u0026R":  "PrimitiveFloat"
+                                                                               },
+                                                                "widgets_values":  [
+                                                                                       5
+                                                                                   ]
+                                                            },
+                                                            {
+                                                                "id":  196,
+                                                                "type":  "PathchSageAttentionKJ",
+                                                                "pos":  [
+                                                                            -733.7823765192829,
+                                                                            -281.6868704362836
+                                                                        ],
+                                                                "size":  [
+                                                                             270,
+                                                                             82
+                                                                         ],
+                                                                "flags":  {
+                                                                              "collapsed":  false
+                                                                          },
+                                                                "order":  2,
+                                                                "mode":  0,
+                                                                "inputs":  [
+                                                                               {
+                                                                                   "localized_name":  "model",
+                                                                                   "name":  "model",
+                                                                                   "type":  "MODEL",
+                                                                                   "link":  367
+                                                                               }
+                                                                           ],
+                                                                "outputs":  [
+                                                                                {
+                                                                                    "localized_name":  "MODEL",
+                                                                                    "name":  "MODEL",
+                                                                                    "type":  "MODEL",
+                                                                                    "links":  [
+                                                                                                  371
+                                                                                              ]
+                                                                                }
+                                                                            ],
+                                                                "properties":  {
+                                                                                   "Node name for S\u0026R":  "PathchSageAttentionKJ",
+                                                                                   "cnr_id":  "comfyui-kjnodes",
+                                                                                   "ver":  "1.2.6"
+                                                                               },
+                                                                "widgets_values":  [
+                                                                                       "auto",
+                                                                                       true
+                                                                                   ]
+                                                            }
+                                                        ],
+                                              "groups":  [
+
+                                                         ],
+                                              "links":  [
+                                                            {
+                                                                "id":  371,
+                                                                "origin_id":  196,
+                                                                "origin_slot":  0,
+                                                                "target_id":  198,
+                                                                "target_slot":  0,
+                                                                "type":  "MODEL"
+                                                            },
+                                                            {
+                                                                "id":  372,
+                                                                "origin_id":  198,
+                                                                "origin_slot":  0,
+                                                                "target_id":  127,
+                                                                "target_slot":  0,
+                                                                "type":  "MODEL"
+                                                            },
+                                                            {
+                                                                "id":  234,
+                                                                "origin_id":  127,
+                                                                "origin_slot":  0,
+                                                                "target_id":  103,
+                                                                "target_slot":  0,
+                                                                "type":  "MODEL"
+                                                            },
+                                                            {
+                                                                "id":  367,
+                                                                "origin_id":  -10,
+                                                                "origin_slot":  0,
+                                                                "target_id":  196,
+                                                                "target_slot":  0,
+                                                                "type":  "MODEL"
+                                                            },
+                                                            {
+                                                                "id":  232,
+                                                                "origin_id":  -10,
+                                                                "origin_slot":  1,
+                                                                "target_id":  127,
+                                                                "target_slot":  1,
+                                                                "type":  "CONDITIONING"
+                                                            },
+                                                            {
+                                                                "id":  192,
+                                                                "origin_id":  103,
+                                                                "origin_slot":  0,
+                                                                "target_id":  -20,
+                                                                "target_slot":  0,
+                                                                "type":  "MODEL"
+                                                            },
+                                                            {
+                                                                "id":  376,
+                                                                "origin_id":  -10,
+                                                                "origin_slot":  2,
+                                                                "target_id":  200,
+                                                                "target_slot":  0,
+                                                                "type":  "FLOAT"
+                                                            },
+                                                            {
+                                                                "id":  377,
+                                                                "origin_id":  200,
+                                                                "origin_slot":  0,
+                                                                "target_id":  103,
+                                                                "target_slot":  1,
+                                                                "type":  "FLOAT"
+                                                            }
+                                                        ],
+                                              "extra":  {
+                                                            "workflowRendererVersion":  "LG"
+                                                        }
+                                          }
+                                      ]
+                    },
+    "config":  {
+
+               },
+    "extra":  {
+                  "frontendVersion":  "1.36.14",
+                  "reroutes":  [
+                                   {
+                                       "id":  1,
+                                       "pos":  [
+                                                   1159.4289556769281,
+                                                   -587.6041913502737
+                                               ],
+                                       "linkIds":  [
+                                                       307
+                                                   ]
+                                   }
+                               ],
+                  "VHS_latentpreview":  false,
+                  "VHS_latentpreviewrate":  0,
+                  "VHS_MetadataImage":  true,
+                  "VHS_KeepIntermediate":  true,
+                  "ue_links":  [
+
+                               ],
+                  "workflowRendererVersion":  "LG",
+                  "ds":  {
+                             "scale":  0.47362440744767986,
+                             "offset":  [
+                                            2675.149161377826,
+                                            1517.6892971822422
+                                        ]
+                         },
+                  "linkExtensions":  [
+                                         {
+                                             "id":  307,
+                                             "parentId":  1
+                                         }
+                                     ]
+              },
+    "version":  0.4
+}

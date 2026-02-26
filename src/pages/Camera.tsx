@@ -22,15 +22,17 @@ type RenderResult = {
 }
 
 const MAX_PARALLEL = 1
-const API_ENDPOINT = '/api/wan'
-const FIXED_FPS = 10
-const FIXED_SECONDS = 5
+const API_ENDPOINT = '/api/wan-remix'
+const FIXED_FPS = 8
+const DEFAULT_SECONDS = 5
+const EIGHT_SECOND_MODE_SECONDS = 8
 const FIXED_STEPS = 4
 const FIXED_CFG = 1
-const FIXED_WIDTH = 832
-const FIXED_HEIGHT = 576
-const FIXED_FRAME_COUNT = FIXED_FPS * FIXED_SECONDS
-const VIDEO_TICKET_COST = 1
+const BASE_VIDEO_TICKET_COST = 1
+const EIGHT_SECOND_MODE_TICKET_COST = 2
+const FIXED_MAX_LONG_SIDE = 768
+const FIXED_MIN_SIDE = 256
+const FIXED_SIZE_MULTIPLE = 64
 const OAUTH_REDIRECT_URL = getOAuthRedirectUrl()
 
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
@@ -53,6 +55,47 @@ const makeId = () => {
     return crypto.randomUUID()
   }
   return `${Date.now()}-${Math.random().toString(16).slice(2)}`
+}
+
+const fileToDataUrl = (file: File) =>
+  new Promise<string>((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = () => resolve(typeof reader.result === 'string' ? reader.result : '')
+    reader.onerror = () => reject(new Error('画像の読み取りに失敗しました。'))
+    reader.readAsDataURL(file)
+  })
+
+const getImageSize = (file: File) =>
+  new Promise<{ width: number; height: number }>((resolve, reject) => {
+    const url = URL.createObjectURL(file)
+    const image = new Image()
+    image.onload = () => {
+      const width = image.naturalWidth || image.width
+      const height = image.naturalHeight || image.height
+      URL.revokeObjectURL(url)
+      resolve({ width, height })
+    }
+    image.onerror = () => {
+      URL.revokeObjectURL(url)
+      reject(new Error('画像サイズの取得に失敗しました。'))
+    }
+    image.src = url
+  })
+
+const clampDimension = (value: number) => {
+  const rounded = Math.round(value / FIXED_SIZE_MULTIPLE) * FIXED_SIZE_MULTIPLE
+  return Math.max(FIXED_MIN_SIDE, Math.min(3000, rounded))
+}
+
+const toVideoDimensions = (width: number, height: number) => {
+  const longest = Math.max(width, height)
+  const scale = longest > FIXED_MAX_LONG_SIDE ? FIXED_MAX_LONG_SIDE / longest : 1
+  const scaledWidth = width * scale
+  const scaledHeight = height * scale
+  return {
+    width: clampDimension(scaledWidth),
+    height: clampDimension(scaledHeight),
+  }
 }
 
 const normalizeVideo = (value: unknown, filename?: string) => {
@@ -218,10 +261,11 @@ const extractJobId = (payload: any) => payload?.id || payload?.jobId || payload?
 export function Camera() {
   const [prompt, setPrompt] = useState('')
   const [negativePrompt, setNegativePrompt] = useState('')
+  const [sourceImageFile, setSourceImageFile] = useState<File | null>(null)
+  const [sourceImagePreview, setSourceImagePreview] = useState('')
   const [results, setResults] = useState<RenderResult[]>([])
   const [statusMessage, setStatusMessage] = useState('')
   const [isRunning, setIsRunning] = useState(false)
-  const [step, setStep] = useState(0)
   const [session, setSession] = useState<Session | null>(null)
   const [authReady, setAuthReady] = useState(!supabase)
   const [ticketCount, setTicketCount] = useState<number | null>(null)
@@ -229,22 +273,17 @@ export function Camera() {
   const [ticketMessage, setTicketMessage] = useState('')
   const [showTicketModal, setShowTicketModal] = useState(false)
   const [errorModalMessage, setErrorModalMessage] = useState<string | null>(null)
+  const [isEightSecondMode, setIsEightSecondMode] = useState(false)
   const runIdRef = useRef(0)
   const navigate = useNavigate()
+  const selectedTicketCost = isEightSecondMode ? EIGHT_SECOND_MODE_TICKET_COST : BASE_VIDEO_TICKET_COST
 
   const totalFrames = results.length || 1
   const completedCount = useMemo(() => results.filter((item) => item.video).length, [results])
   const progress = totalFrames ? completedCount / totalFrames : 0
   const displayVideo = results[0]?.video ?? null
   const accessToken = session?.access_token ?? ''
-  const totalSteps = 3
-  const stepTitles = ['プロンプト入力', 'ネガティブ入力', '確認して生成'] as const
-  const stepDescriptions = [
-    '',
-    '任意: 避けたい内容を入力。',
-    '利用規約に同意して内容を確認して生成。',
-  ] as const
-  const canAdvancePrompt = prompt.trim().length > 0
+  const canGenerate = prompt.trim().length > 0 && Boolean(sourceImageFile) && !isRunning
 
   const viewerStyle = useMemo(
     () =>
@@ -278,8 +317,7 @@ export function Camera() {
     const oauthError = url.searchParams.get('error_description') || url.searchParams.get('error')
     if (oauthError) {
       console.error('OAuth callback error', oauthError)
-      setAuthStatus('error')
-      setAuthMessage('ログインに失敗しました。もう一度お試しください。')
+      setStatusMessage('ログインに失敗しました。もう一度お試しください。')
       url.searchParams.delete('error')
       url.searchParams.delete('error_description')
       window.history.replaceState({}, document.title, url.toString())
@@ -291,8 +329,7 @@ export function Camera() {
     supabase.auth.exchangeCodeForSession(window.location.href).then(({ error }) => {
       if (error) {
         console.error('exchangeCodeForSession failed', error)
-        setAuthStatus('error')
-        setAuthMessage('ログインに失敗しました。もう一度お試しください。')
+        setStatusMessage('ログインに失敗しました。もう一度お試しください。')
         return
       }
       const cleaned = new URL(window.location.href)
@@ -301,6 +338,16 @@ export function Camera() {
       window.history.replaceState({}, document.title, cleaned.toString())
     })
   }, [])
+
+  useEffect(() => {
+    if (!sourceImageFile) {
+      setSourceImagePreview('')
+      return
+    }
+    const url = URL.createObjectURL(sourceImageFile)
+    setSourceImagePreview(url)
+    return () => URL.revokeObjectURL(url)
+  }, [sourceImageFile])
 
   const fetchTickets = useCallback(
     async (token: string) => {
@@ -338,15 +385,29 @@ export function Camera() {
 
   const submitVideo = useCallback(
     async (token: string) => {
+      if (!sourceImageFile) {
+        throw new Error('元画像を選択してください。')
+      }
+      const imageDataUrl = await fileToDataUrl(sourceImageFile)
+      const imageSize = await getImageSize(sourceImageFile)
+      const dims = toVideoDimensions(imageSize.width, imageSize.height)
+      const targetSeconds = isEightSecondMode ? EIGHT_SECOND_MODE_SECONDS : DEFAULT_SECONDS
+      const targetFrameCount = FIXED_FPS * targetSeconds
+      const stabilizedPrompt = `${prompt}, keep same person identity, keep same face, keep same camera distance, no zoom in`
+      const stabilizedNegative = [negativePrompt, 'zoom in, close-up, crop, face distortion, identity change']
+        .filter(Boolean)
+        .join(', ')
       const input: Record<string, unknown> = {
-        mode: 't2v',
-        prompt,
-        negative_prompt: negativePrompt,
-        width: FIXED_WIDTH,
-        height: FIXED_HEIGHT,
+        mode: 'i2v',
+        image: imageDataUrl,
+        image_name: sourceImageFile.name || 'input.png',
+        prompt: stabilizedPrompt,
+        negative_prompt: stabilizedNegative,
+        width: dims.width,
+        height: dims.height,
         fps: FIXED_FPS,
-        seconds: FIXED_SECONDS,
-        num_frames: FIXED_FRAME_COUNT,
+        seconds: targetSeconds,
+        num_frames: targetFrameCount,
         steps: FIXED_STEPS,
         cfg: FIXED_CFG,
         seed: 0,
@@ -386,7 +447,7 @@ export function Camera() {
       if (!jobId) throw new Error('ジョブID取得に失敗しました。')
       return { jobId }
     },
-    [negativePrompt, prompt],
+    [isEightSecondMode, negativePrompt, prompt, sourceImageFile],
   )
 
   const pollJob = useCallback(async (jobId: string, runId: number, token?: string) => {
@@ -447,14 +508,14 @@ export function Camera() {
     if (accessToken) {
       setStatusMessage('クレジット確認中...')
       const latestCount = await fetchTickets(accessToken)
-      if (latestCount !== null && latestCount < VIDEO_TICKET_COST) {
+      if (latestCount !== null && latestCount < selectedTicketCost) {
         setShowTicketModal(true)
         return
       }
     } else if (ticketCount === null) {
       setStatusMessage('クレジット確認中...')
       return
-    } else if (ticketCount < VIDEO_TICKET_COST) {
+    } else if (ticketCount < selectedTicketCost) {
       setShowTicketModal(true)
       return
     }
@@ -533,27 +594,18 @@ export function Camera() {
         setIsRunning(false)
       }
     }
-  }, [accessToken, fetchTickets, pollJob, session, submitVideo, ticketCount, ticketStatus])
+  }, [accessToken, fetchTickets, pollJob, selectedTicketCost, session, submitVideo, ticketCount, ticketStatus])
 
   const handleGenerate = async () => {
+    if (!sourceImageFile) {
+      setStatusMessage('元画像を選択してください。')
+      return
+    }
     if (!prompt.trim()) {
       setStatusMessage('プロンプトを入力してください。')
       return
     }
     await startBatch()
-  }
-
-  const handleNext = () => {
-    setStep((prev) => Math.min(prev + 1, totalSteps - 1))
-  }
-
-  const handleBack = () => {
-    setStep((prev) => Math.max(prev - 1, 0))
-  }
-
-  const handleSkipNegative = () => {
-    setNegativePrompt('')
-    setStep(totalSteps - 1)
   }
 
   const handleGoogleSignIn = async () => {
@@ -581,7 +633,7 @@ export function Camera() {
 
   const handleDownload = useCallback(async () => {
     if (!displayVideo) return
-    const filename = `animoni-video.${isGif ? 'gif' : 'mp4'}`
+    const filename = `meltai-video.${isGif ? 'gif' : 'mp4'}`
     try {
       let blob: Blob
       if (displayVideo.startsWith('data:')) {
@@ -643,84 +695,74 @@ export function Camera() {
         <section className="wizard-panel wizard-panel--inputs">
           <div className="wizard-card wizard-card--step">
             <div className="wizard-stepper">
-              <div className="wizard-stepper__meta">
-                <span>{`ステップ ${step + 1} / ${totalSteps}`}</span>
-                <div className="wizard-dots">
-                  {Array.from({ length: totalSteps }).map((_, index) => (
-                    <span
-                      key={`t2v-step-${index}`}
-                      className={`wizard-dot${index <= step ? ' is-active' : ''}`}
-                    />
-                  ))}
-                </div>
-              </div>
               <div className="wizard-status">
                 {ticketStatus === 'loading' && 'クレジット確認中...'}
                 {ticketStatus !== 'loading' && `クレジット残り: ${ticketCount ?? 0}`}
                 {ticketStatus === 'error' && ticketMessage ? ` / ${ticketMessage}` : ''}
               </div>
-              <h2>{stepTitles[step]}</h2>
-              <p>{stepDescriptions[step]}</p>
+              <h2>動画生成</h2>
             </div>
 
-            {step === 0 && (
-              <label className="wizard-field">
-                <span>作りたい動画の内容を入力してください</span>
-                <textarea
-                  rows={4}
-                  value={prompt}
-                  onChange={(e) => setPrompt(e.target.value)}
-                  placeholder="例: 夜景の街を歩くカップル"
+            <div className="wizard-section">
+              <label className="upload-box">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(event) => setSourceImageFile(event.target.files?.[0] || null)}
                 />
-              </label>
-            )}
-
-            {step === 1 && (
-              <label className="wizard-field">
-                <span>ネガティブプロンプト</span>
-                <textarea
-                  rows={3}
-                  value={negativePrompt}
-                  onChange={(e) => setNegativePrompt(e.target.value)}
-                  placeholder="任意: 避けたい内容を入力。"
-                />
-              </label>
-            )}
-
-            {step === 2 && (
-              <div className="wizard-summary">
                 <div>
-                  <p>プロンプト</p>
-                  <strong>{prompt || '—'}</strong>
+                  <strong>{sourceImageFile?.name || '元画像を選択'}</strong>
+                  <span>JPG / PNG / WEBP</span>
                 </div>
-                <div>
-                  <p>ネガティブプロンプト</p>
-                  <strong>{negativePrompt || 'なし'}</strong>
+              </label>
+              {sourceImagePreview && (
+                <div className="preview-card">
+                  <img src={sourceImagePreview} alt="アップロード画像プレビュー" />
+                  <button
+                    type="button"
+                    className="preview-card__remove"
+                    onClick={() => setSourceImageFile(null)}
+                    aria-label="画像を削除"
+                  >
+                    ×
+                  </button>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
+
+            <label className="wizard-field">
+              <span>作りたい動画の内容を入力してください</span>
+              <textarea
+                rows={4}
+                value={prompt}
+                onChange={(e) => setPrompt(e.target.value)}
+                placeholder="例: カメラ目線で微笑み、髪が風で揺れる"
+              />
+            </label>
+
+            <label className="wizard-field">
+              <span>ネガティブプロンプト</span>
+              <textarea
+                rows={3}
+                value={negativePrompt}
+                onChange={(e) => setNegativePrompt(e.target.value)}
+                placeholder="任意: 避けたい内容を入力。"
+              />
+            </label>
+
+            <label className="duration-toggle">
+              <input
+                type="checkbox"
+                checked={isEightSecondMode}
+                onChange={(event) => setIsEightSecondMode(event.target.checked)}
+              />
+              <span>8秒モードを使う（OFF時は5秒 / ON時は2クレジット消費）</span>
+            </label>
 
             <div className="wizard-actions">
-              {step > 0 && (
-                <button type="button" className="ghost-button" onClick={handleBack}>
-                  戻る
-                </button>
-              )}
-              {step === 0 && (
-                <button type="button" className="primary-button" onClick={handleNext} disabled={!canAdvancePrompt}>
-                  次へ
-                </button>
-              )}
-              {step === 1 && (
-                <button type="button" className="primary-button" onClick={handleNext}>
-                  次へ
-                </button>
-              )}
-              {step === 2 && (
-                <button type="button" className="primary-button" onClick={handleGenerate} disabled={isRunning || !session}>
-                  {isRunning ? 'Generating...' : '動画を生成'}
-                </button>
-              )}
+              <button type="button" className="primary-button" onClick={handleGenerate} disabled={!canGenerate}>
+                {isRunning ? 'Generating...' : '動画を生成'}
+              </button>
             </div>
           </div>
         </section>
@@ -758,16 +800,18 @@ export function Camera() {
                   <video controls src={displayVideo} />
                 )
               ) : (
-                <div className="stage-placeholder">プロンプトを入力してください。</div>
+                <div className="stage-placeholder">元画像とプロンプトを入力してください。</div>
               )}
             </div>
           </div>
         </section>
-      </div>{showTicketModal && (
+      </div>
+
+      {showTicketModal && (
         <div className="modal-overlay" role="dialog" aria-modal="true">
           <div className="modal-card">
             <h3>クレジット不足</h3>
-            <p>動画生成は1クレジットです。購入ページへ移動しますか？</p>
+            <p>この設定の動画生成は{selectedTicketCost}クレジットです。購入ページへ移動しますか？</p>
             <div className="modal-actions">
               <button type="button" className="ghost-button" onClick={() => setShowTicketModal(false)}>
                 閉じる

@@ -1,7 +1,7 @@
-import workflowI2VTemplate from './wan-workflow-i2v.json'
-import workflowT2VTemplate from './wan-workflow-t2v.json'
-import nodeMapI2VTemplate from './wan-node-map-i2v.json'
-import nodeMapT2VTemplate from './wan-node-map-t2v.json'
+import workflowI2VTemplate from './wan-remix-workflow-i2v.json'
+import workflowT2VTemplate from './wan-remix-workflow-t2v.json'
+import nodeMapI2VTemplate from './wan-remix-node-map-i2v.json'
+import nodeMapT2VTemplate from './wan-remix-node-map-t2v.json'
 import { createClient, type User } from '@supabase/supabase-js'
 import { buildCorsHeaders, isCorsBlocked } from '../_shared/cors'
 import { isUnderageImage } from '../_shared/rekognition'
@@ -10,6 +10,7 @@ type Env = {
   RUNPOD_API_KEY: string
   RUNPOD_ENDPOINT_URL?: string
   RUNPOD_WAN_ENDPOINT_URL?: string
+  RUNPOD_WAN_REMIX_ENDPOINT_URL?: string
   COMFY_ORG_API_KEY?: string
   AWS_ACCESS_KEY_ID?: string
   AWS_SECRET_ACCESS_KEY?: string
@@ -27,7 +28,7 @@ const jsonResponse = (body: unknown, status = 200, headers: HeadersInit = {}) =>
   })
 
 const resolveEndpoint = (env: Env) =>
-  (env.RUNPOD_WAN_ENDPOINT_URL ?? env.RUNPOD_ENDPOINT_URL)?.replace(/\/$/, '')
+  (env.RUNPOD_WAN_REMIX_ENDPOINT_URL ?? env.RUNPOD_WAN_ENDPOINT_URL ?? env.RUNPOD_ENDPOINT_URL)?.replace(/\/$/, '')
 
 type NodeMapEntry = {
   id: string
@@ -52,7 +53,8 @@ type NodeMap = Partial<{
 }>
 
 const SIGNUP_TICKET_GRANT = 5
-const VIDEO_TICKET_COST = 1
+const BASE_VIDEO_TICKET_COST = 1
+const EIGHT_SECOND_MODE_TICKET_COST = 2
 const MAX_IMAGE_BYTES = 10 * 1024 * 1024
 const MAX_PROMPT_LENGTH = 500
 const MAX_NEGATIVE_PROMPT_LENGTH = 500
@@ -61,9 +63,13 @@ const MIN_DIMENSION = 256
 const MAX_DIMENSION = 3000
 const MIN_CFG = 0
 const MAX_CFG = 10
-const FIXED_FPS = 12
-const FIXED_SECONDS = 5
-const FIXED_FRAMES = FIXED_FPS * FIXED_SECONDS
+const FIXED_FPS = 8
+const DEFAULT_SECONDS = 5
+const EIGHT_SECOND_MODE_SECONDS = 8
+const FIXED_SIZE_MULTIPLE = 64
+const FIXED_MAX_LONG_SIDE = 768
+const DEFAULT_WIDTH = 768
+const DEFAULT_HEIGHT = 448
 const UNDERAGE_BLOCK_MESSAGE =
   'この画像には暴力的な表現、低年齢、または規約違反の可能性があります。別の画像でお試しください。'
 const getWorkflowTemplate = async (mode: 'i2v' | 't2v') =>
@@ -378,6 +384,28 @@ const refundTicket = async (
   }
 }
 
+const resolveTicketCostForUsage = async (
+  admin: ReturnType<typeof createClient>,
+  usageId: string,
+  payload: any,
+) => {
+  const { data, error } = await admin
+    .from('ticket_events')
+    .select('delta')
+    .eq('usage_id', usageId)
+    .maybeSingle()
+
+  if (!error && data) {
+    const delta = Number((data as { delta?: unknown }).delta)
+    if (Number.isFinite(delta) && delta < 0) {
+      return Math.max(1, Math.abs(Math.floor(delta)))
+    }
+  }
+
+  const seconds = extractSecondsFromPayload(payload)
+  return ticketCostForSeconds(seconds)
+}
+
 const hasOutputList = (value: unknown) => Array.isArray(value) && value.length > 0
 
 const hasOutputString = (value: unknown) => typeof value === 'string' && value.trim() !== ''
@@ -458,6 +486,47 @@ const estimateBase64Bytes = (value: string) => {
   return Math.max(0, Math.floor((trimmed.length * 3) / 4) - padding)
 }
 
+const normalizeSeconds = (value: unknown) => {
+  const parsed = Math.floor(Number(value))
+  return parsed === EIGHT_SECOND_MODE_SECONDS ? EIGHT_SECOND_MODE_SECONDS : DEFAULT_SECONDS
+}
+
+const ticketCostForSeconds = (seconds: number) =>
+  seconds === EIGHT_SECOND_MODE_SECONDS ? EIGHT_SECOND_MODE_TICKET_COST : BASE_VIDEO_TICKET_COST
+
+const extractSecondsFromPayload = (payload: any) => {
+  const candidates = [
+    payload?.input?.seconds,
+    payload?.seconds,
+    payload?.output?.input?.seconds,
+    payload?.output?.seconds,
+    payload?.result?.input?.seconds,
+    payload?.result?.seconds,
+    payload?.metadata?.seconds,
+    payload?.output?.metadata?.seconds,
+    payload?.result?.metadata?.seconds,
+  ]
+  for (const value of candidates) {
+    if (value === undefined || value === null) continue
+    return normalizeSeconds(value)
+  }
+  return DEFAULT_SECONDS
+}
+
+const clampDimension = (value: number, maxLongSide: number) => {
+  const rounded = Math.round(value / FIXED_SIZE_MULTIPLE) * FIXED_SIZE_MULTIPLE
+  return Math.max(MIN_DIMENSION, Math.min(maxLongSide, rounded))
+}
+
+const toSafeDimensions = (width: number, height: number, maxLongSide: number) => {
+  const longest = Math.max(width, height)
+  const scale = longest > maxLongSide ? maxLongSide / longest : 1
+  return {
+    width: clampDimension(width * scale, maxLongSide),
+    height: clampDimension(height * scale, maxLongSide),
+  }
+}
+
 const ensureBase64Input = (label: string, value: unknown) => {
   if (typeof value !== 'string' || !value.trim()) return ''
   const trimmed = value.trim()
@@ -530,7 +599,7 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
 
   const endpoint = resolveEndpoint(env)
   if (!endpoint) {
-    return jsonResponse({ error: 'RUNPOD_WAN_ENDPOINT_URL is not set.' }, 500, corsHeaders)
+    return jsonResponse({ error: 'RUNPOD_WAN_REMIX_ENDPOINT_URL is not set.' }, 500, corsHeaders)
   }
   const upstream = await fetch(`${endpoint}/status/${encodeURIComponent(id)}`, {
     headers: { Authorization: `Bearer ${env.RUNPOD_API_KEY}` },
@@ -545,14 +614,15 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
   }
 
   if (payload && shouldConsumeTicket(payload)) {
-    const usageId = `wan:${id}`
+    const usageId = `wan_remix:${id}`
+    const ticketCost = await resolveTicketCostForUsage(auth.admin, usageId, payload)
     const ticketMeta = {
       job_id: id,
       status: payload?.status ?? payload?.state ?? null,
       source: 'status',
-      ticket_cost: VIDEO_TICKET_COST,
+      ticket_cost: ticketCost,
     }
-    const result = await consumeTicket(auth.admin, auth.user, ticketMeta, usageId, VIDEO_TICKET_COST, corsHeaders)
+    const result = await consumeTicket(auth.admin, auth.user, ticketMeta, usageId, ticketCost, corsHeaders)
     if ('response' in result) {
       return result.response
     }
@@ -563,15 +633,16 @@ export const onRequestGet: PagesFunction<Env> = async ({ request, env }) => {
   }
 
   if (payload && (isFailureStatus(payload) || hasOutputError(payload))) {
-    const usageId = `wan:${id}`
+    const usageId = `wan_remix:${id}`
+    const ticketCost = await resolveTicketCostForUsage(auth.admin, usageId, payload)
     const refundMeta = {
       job_id: id,
       status: payload?.status ?? payload?.state ?? null,
       source: 'status',
       reason: 'failure',
-      ticket_cost: VIDEO_TICKET_COST,
+      ticket_cost: ticketCost,
     }
-    const refundResult = await refundTicket(auth.admin, auth.user, refundMeta, usageId, VIDEO_TICKET_COST, corsHeaders)
+    const refundResult = await refundTicket(auth.admin, auth.user, refundMeta, usageId, ticketCost, corsHeaders)
     if ('response' in refundResult) {
       return refundResult.response
     }
@@ -609,7 +680,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
 
   const endpoint = resolveEndpoint(env)
   if (!endpoint) {
-    return jsonResponse({ error: 'RUNPOD_WAN_ENDPOINT_URL is not set.' }, 500, corsHeaders)
+    return jsonResponse({ error: 'RUNPOD_WAN_REMIX_ENDPOINT_URL is not set.' }, 500, corsHeaders)
   }
 
   const payload = await request.json().catch(() => null)
@@ -669,11 +740,12 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   const negativePrompt = String(input?.negative_prompt ?? input?.negative ?? '')
   const steps = FIXED_STEPS
   const cfg = 1
-  const width = Math.floor(Number(input?.width ?? 832))
-  const height = Math.floor(Number(input?.height ?? 576))
+  const requestedWidth = Math.floor(Number(input?.width ?? DEFAULT_WIDTH))
+  const requestedHeight = Math.floor(Number(input?.height ?? DEFAULT_HEIGHT))
+  const seconds = normalizeSeconds(input?.seconds ?? DEFAULT_SECONDS)
+  const ticketCost = ticketCostForSeconds(seconds)
   const fps = FIXED_FPS
-  const seconds = FIXED_SECONDS
-  const numFrames = FIXED_FRAMES
+  const numFrames = FIXED_FPS * seconds
   const seed = input?.randomize_seed
     ? Math.floor(Math.random() * 2147483647)
     : Number(input?.seed ?? 0)
@@ -687,20 +759,21 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   if (!Number.isFinite(cfg) || cfg < MIN_CFG || cfg > MAX_CFG) {
     return jsonResponse({ error: `cfg must be between ${MIN_CFG} and ${MAX_CFG}.` }, 400, corsHeaders)
   }
-  if (!Number.isFinite(width) || width < MIN_DIMENSION || width > MAX_DIMENSION) {
+  if (!Number.isFinite(requestedWidth) || requestedWidth < MIN_DIMENSION || requestedWidth > MAX_DIMENSION) {
     return jsonResponse(
       { error: `width must be between ${MIN_DIMENSION} and ${MAX_DIMENSION}.` },
       400,
       corsHeaders,
     )
   }
-  if (!Number.isFinite(height) || height < MIN_DIMENSION || height > MAX_DIMENSION) {
+  if (!Number.isFinite(requestedHeight) || requestedHeight < MIN_DIMENSION || requestedHeight > MAX_DIMENSION) {
     return jsonResponse(
       { error: `height must be between ${MIN_DIMENSION} and ${MAX_DIMENSION}.` },
       400,
       corsHeaders,
     )
   }
+  const { width, height } = toSafeDimensions(requestedWidth, requestedHeight, FIXED_MAX_LONG_SIDE)
   const totalSteps = Math.max(1, Math.floor(steps))
   const splitStep = Math.max(1, Math.floor(totalSteps / 2))
 
@@ -708,13 +781,14 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     prompt_length: prompt.length,
     width,
     height,
+    seconds,
     frames: numFrames,
     fps,
     steps: totalSteps,
     mode,
-    ticket_cost: VIDEO_TICKET_COST,
+    ticket_cost: ticketCost,
   }
-  const ticketCheck = await ensureTicketAvailable(auth.admin, auth.user, VIDEO_TICKET_COST, corsHeaders)
+  const ticketCheck = await ensureTicketAvailable(auth.admin, auth.user, ticketCost, corsHeaders)
   if ('response' in ticketCheck) {
     return ticketCheck.response
   }
@@ -752,6 +826,8 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   const runpodInput: Record<string, unknown> = {
     workflow,
     images,
+    seconds,
+    ticket_cost: ticketCost,
   }
   if (comfyKey) {
     runpodInput.comfy_org_api_key = comfyKey
@@ -779,14 +855,14 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     upstream.ok && Boolean(jobId) && !isFailureStatus(upstreamPayload) && !hasOutputError(upstreamPayload)
 
   if (shouldCharge && jobId) {
-    const usageId = `wan:${jobId}`
+    const usageId = `wan_remix:${jobId}`
     const ticketMetaWithJob = {
       ...ticketMeta,
       job_id: jobId,
       status: upstreamPayload?.status ?? upstreamPayload?.state ?? null,
       source: 'run',
     }
-    const result = await consumeTicket(auth.admin, auth.user, ticketMetaWithJob, usageId, VIDEO_TICKET_COST, corsHeaders)
+    const result = await consumeTicket(auth.admin, auth.user, ticketMetaWithJob, usageId, ticketCost, corsHeaders)
     if ('response' in result) {
       return result.response
     }
@@ -796,14 +872,14 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     }
   } else if (upstreamPayload && shouldConsumeTicket(upstreamPayload)) {
     const jobId = extractJobId(upstreamPayload)
-    const usageId = jobId ? `wan:${jobId}` : undefined
+    const usageId = jobId ? `wan_remix:${jobId}` : undefined
     const ticketMetaWithJob = {
       ...ticketMeta,
       job_id: jobId ?? undefined,
       status: upstreamPayload?.status ?? upstreamPayload?.state ?? null,
       source: 'run',
     }
-    const result = await consumeTicket(auth.admin, auth.user, ticketMetaWithJob, usageId, VIDEO_TICKET_COST, corsHeaders)
+    const result = await consumeTicket(auth.admin, auth.user, ticketMetaWithJob, usageId, ticketCost, corsHeaders)
     if ('response' in result) {
       return result.response
     }

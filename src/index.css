@@ -7,8 +7,8 @@
 body {
   margin: 0;
   font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
-  background: #f8fafc;
-  color: #0f172a;
+  background: radial-gradient(circle at top, #22113d 0%, #0a0914 48%, #040407 100%);
+  color: #f4f0ff;
 }
 
 button {
