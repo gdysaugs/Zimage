@@ -23,7 +23,7 @@ type RenderResult = {
 
 const MAX_PARALLEL = 1
 const API_ENDPOINT = '/api/wan-remix'
-const FIXED_FPS = 8
+const FIXED_FPS = 10
 const DEFAULT_SECONDS = 5
 const EIGHT_SECOND_MODE_SECONDS = 8
 const FIXED_STEPS = 4

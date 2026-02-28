@@ -182,6 +182,9 @@ body {
   letter-spacing: 0.06em;
   color: #f3e8ff;
   font-family: 'Noto Serif JP', 'Yu Mincho', 'Hiragino Mincho ProN', serif;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
 }
 
 .top-nav__links {

@@ -1,5 +1,5 @@
 ﻿import { useEffect, useState } from 'react'
-import { NavLink, useLocation } from 'react-router-dom'
+import { Link, NavLink, useLocation } from 'react-router-dom'
 
 export function TopNav() {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -12,7 +12,9 @@ export function TopNav() {
   return (
     <header className='top-nav'>
       <div className='top-nav__brand'>
-        <span className='top-nav__title'>Melt AI</span>
+        <Link to='/' className='top-nav__title'>
+          Melt AI
+        </Link>
       </div>
       <button
         type='button'
