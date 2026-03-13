@@ -66,7 +66,6 @@ const MAX_CFG = 10
 const FIXED_FPS = 10
 const DEFAULT_SECONDS = 5
 const EIGHT_SECOND_MODE_SECONDS = 8
-const EIGHT_SECOND_MODE_FPS = 8
 const FIXED_SIZE_MULTIPLE = 64
 const FIXED_MAX_LONG_SIDE = 768
 const DEFAULT_WIDTH = 768
@@ -745,7 +744,7 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   const requestedHeight = Math.floor(Number(input?.height ?? DEFAULT_HEIGHT))
   const seconds = normalizeSeconds(input?.seconds ?? DEFAULT_SECONDS)
   const ticketCost = ticketCostForSeconds(seconds)
-  const fps = seconds === EIGHT_SECOND_MODE_SECONDS ? EIGHT_SECOND_MODE_FPS : FIXED_FPS
+  const fps = FIXED_FPS
   const numFrames = fps * seconds
   const seed = input?.randomize_seed
     ? Math.floor(Math.random() * 2147483647)
