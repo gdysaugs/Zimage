@@ -26,6 +26,7 @@ const API_ENDPOINT = '/api/wan-remix'
 const FIXED_FPS = 10
 const DEFAULT_SECONDS = 5
 const EIGHT_SECOND_MODE_SECONDS = 8
+const EIGHT_SECOND_MODE_FPS = 8
 const FIXED_STEPS = 4
 const FIXED_CFG = 1
 const BASE_VIDEO_TICKET_COST = 1
@@ -392,7 +393,8 @@ export function Camera() {
       const imageSize = await getImageSize(sourceImageFile)
       const dims = toVideoDimensions(imageSize.width, imageSize.height)
       const targetSeconds = isEightSecondMode ? EIGHT_SECOND_MODE_SECONDS : DEFAULT_SECONDS
-      const targetFrameCount = FIXED_FPS * targetSeconds
+      const targetFps = targetSeconds === EIGHT_SECOND_MODE_SECONDS ? EIGHT_SECOND_MODE_FPS : FIXED_FPS
+      const targetFrameCount = targetFps * targetSeconds
       const stabilizedPrompt = `${prompt}, keep same person identity, keep same face, keep same camera distance, no zoom in`
       const stabilizedNegative = [negativePrompt, 'zoom in, close-up, crop, face distortion, identity change']
         .filter(Boolean)
@@ -405,7 +407,7 @@ export function Camera() {
         negative_prompt: stabilizedNegative,
         width: dims.width,
         height: dims.height,
-        fps: FIXED_FPS,
+        fps: targetFps,
         seconds: targetSeconds,
         num_frames: targetFrameCount,
         steps: FIXED_STEPS,
