@@ -41,6 +41,15 @@ export function TopNav() {
         <NavLink to='/purchase' className={({ isActive }) => `top-nav__link${isActive ? ' is-active' : ''}`}>
           クレジット
         </NavLink>
+        <a
+          href='https://meltplus.win/'
+          target='_blank'
+          rel='noopener noreferrer'
+          className='top-nav__link'
+          onClick={() => setMenuOpen(false)}
+        >
+          MeltPlus
+        </a>
       </nav>
     </header>
   )
