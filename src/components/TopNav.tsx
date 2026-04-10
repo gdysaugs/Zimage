@@ -42,6 +42,15 @@ export function TopNav() {
           クレジット
         </NavLink>
         <a
+          href='https://melteichi.uk/'
+          target='_blank'
+          rel='noopener noreferrer'
+          className='top-nav__link'
+          onClick={() => setMenuOpen(false)}
+        >
+          MeltAI-H
+        </a>
+        <a
           href='https://meltplus.win/'
           target='_blank'
           rel='noopener noreferrer'
